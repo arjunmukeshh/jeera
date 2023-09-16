@@ -16,7 +16,7 @@ func AddIssue(c *fiber.Ctx) error {
 	}
 
 	// Create the project in the database
-	result := config.DB.Table("Issues").Create(&issue)
+	result := config.DB.Table("issues").Create(&issue)
 	if result.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"success": false,
@@ -31,12 +31,12 @@ func AddIssue(c *fiber.Ctx) error {
 	})
 }
 
-// ViewAllIssues returns all issues in a specific task of a project
+// ViewAllissues returns all issues in a specific task of a project
 func ViewAllIssues(c *fiber.Ctx) error {
 
-	var Issues []models.Issue
-	config.DB.Table("Issues").Find(&Issues)
-	return c.JSON(&Issues)
+	var issues []models.Issue
+	config.DB.Table("issues").Find(&issues)
+	return c.JSON(&issues)
 
 }
 
@@ -44,7 +44,7 @@ func ViewAllIssues(c *fiber.Ctx) error {
 func ViewIssue(c *fiber.Ctx) error {
 	issueID := c.Params("issue_id")
 	var issue models.Issue
-	config.DB.Table("Issues").Where("issue_id=?", issueID).Find(&issue)
+	config.DB.Table("issues").Where("issue_id=?", issueID).Find(&issue)
 	return c.Status(200).JSON(fiber.Map{
 		"success": true,
 		"message": "Success",
@@ -57,7 +57,7 @@ func DeleteIssue(c *fiber.Ctx) error {
 
 	issue_id := c.Params("issue_id")
 	var issue models.Issue
-	result := config.DB.Table("Issues").First(&issue, issue_id)
+	result := config.DB.Table("issues").First(&issue, issue_id)
 	if result.Error != nil {
 		return c.Status(404).JSON(fiber.Map{
 			"success": false,
@@ -66,7 +66,7 @@ func DeleteIssue(c *fiber.Ctx) error {
 	}
 
 	// Delete the project
-	config.DB.Table("Issues").Delete(&issue)
+	config.DB.Table("issues").Delete(&issue)
 	return c.Status(200).JSON(fiber.Map{
 		"success": true,
 		"message": "Project deleted successfully",
@@ -80,7 +80,7 @@ func UpdateIssue(c *fiber.Ctx) error {
 
 	// Check if the project exists
 	var issue models.Issue
-	result := config.DB.Table("Issues").First(&issue, issue_id)
+	result := config.DB.Table("issues").First(&issue, issue_id)
 	if result.Error != nil {
 		return c.Status(404).JSON(fiber.Map{
 			"success": false,
@@ -98,7 +98,7 @@ func UpdateIssue(c *fiber.Ctx) error {
 	}
 
 	// Update project details
-	config.DB.Table("Issues").Model(&issue).Updates(updatedIssue)
+	config.DB.Table("issues").Model(&issue).Updates(updatedIssue)
 
 	return c.Status(200).JSON(fiber.Map{
 		"success": true,

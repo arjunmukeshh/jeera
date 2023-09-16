@@ -38,16 +38,8 @@ services:
       db:
         condition: service_healthy
 
-  frontend:
-    image: frontend
-    container_name: frontend
-    build:
-      context: frontend
-      dockerfile: Dockerfile
-    ports:
-      - 3006:3006
-    depends_on:
-      - backend
+
+
 networks:
   jeera_network:
     external: true
