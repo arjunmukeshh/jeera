@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"strconv"
+	"time"
+
 	"github.com/BalkanID-University/ssn-chennai-2023-fte-hiring-arjunmukeshh/config"
 	"github.com/BalkanID-University/ssn-chennai-2023-fte-hiring-arjunmukeshh/models"
 	"github.com/gofiber/fiber/v2"
@@ -23,12 +26,27 @@ func GetProject(c *fiber.Ctx) error {
 
 func AddProject(c *fiber.Ctx) error {
 	var project models.Project
-
+	var dummy struct {
+		ProjectID    uint      `gorm:"primaryKey" json:"project_id"`
+		Name         string    `gorm:"not null" json:"name"`
+		Description  string    `json:"description"`
+		MaintainerID string    `json:"maintainer_id"`
+		CreatedAt    time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
+	}
 	// Parse the request body to get project details
-	if err := c.BodyParser(&project); err != nil {
+	if err := c.BodyParser(&dummy); err != nil {
 		return err
 	}
 
+	project.ProjectID = dummy.ProjectID
+	project.Name = dummy.Name
+	project.Description = dummy.Description
+	project.CreatedAt = dummy.CreatedAt
+	maintainerID, err := strconv.ParseUint(dummy.MaintainerID, 10, 64)
+	if err != nil {
+		return err
+	}
+	project.MaintainerID = uint(maintainerID)
 	// Create the project in the database
 	result := config.DB.Table("Projects").Create(&project)
 	if result.Error != nil {

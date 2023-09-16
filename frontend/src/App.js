@@ -5,7 +5,7 @@ import Register from './components/Register';
 import Index from './components/Index';
 import Projects from './components/Projects';
 import ErrorPage from './pages/ErrorPage';
-
+import ViewTasks from './components/ViewTasks';
 const authorized = () => {
   // Check if the user is authorized
   const jwtToken = localStorage.getItem('jwtToken');
@@ -14,7 +14,7 @@ const authorized = () => {
 
 const PrivateRoute = ({ children }) => {
   const authed = authorized() // isauth() returns true or false based on localStorage
-  
+
   return authed ? children : <Navigate to="/error" />;
 }
 function App() {
@@ -25,6 +25,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/error" element={<ErrorPage />} />
+        <Route path="/projects/:projectId/tasks" element={<PrivateRoute><ViewTasks /></PrivateRoute>} />
         <Route
           path="/projects"
           element={

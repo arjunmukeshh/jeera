@@ -1,0 +1,78 @@
+import React, { useState } from 'react';
+
+const AddTaskPopup = ({ onClose, onAddTask }) => {
+  const [newTask, setNewTask] = useState({
+    name: '',
+    description: '',
+    status: 'to do',
+    priority: 'medium',
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTask({
+      ...newTask,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onAddTask(newTask);
+    onClose();
+  };
+
+  return (
+    <div className="popup">
+      <div className="popup-content">
+        <h2>Add New Task</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            value={newTask.name}
+            onChange={handleInputChange}
+            placeholder="Name"
+            required
+          />
+          <br />
+          <input
+            type="text"
+            name="description"
+            value={newTask.description}
+            onChange={handleInputChange}
+            placeholder="Description"
+            required
+          />
+          <br />
+          <select
+            name="status"
+            value={newTask.status}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="to do">To Do</option>
+            <option value="in progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+          <br />
+          <select
+            name="priority"
+            value={newTask.priority}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+          <br />
+          <button type="submit">Add Task</button><br />
+        </form>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+};
+
+export default AddTaskPopup;
