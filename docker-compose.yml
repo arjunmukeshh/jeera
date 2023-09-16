@@ -15,6 +15,10 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: example
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
 
   adminer:
     image: adminer
@@ -27,9 +31,12 @@ services:
     container_name: backend
     build:
       context: backend
-      dockerfile: backend/Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 networks:
   jeera_network:

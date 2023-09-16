@@ -10,7 +10,7 @@ var DB *gorm.DB
 
 func InitDB() (*gorm.DB, error) {
 
-	dsn := "root:example@tcp(172.25.0.2:3306)/Jeera?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:example@tcp(db:3306)/Jeera?charset=utf8mb4&parseTime=True&loc=Local"
 
 	// Open a database connection
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
