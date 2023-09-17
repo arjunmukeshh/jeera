@@ -131,26 +131,109 @@ const ViewTasks = () => {
     }
   };
 
+  const [groupingOption, setGroupingOption] = useState(null);
+
+  const handleGroupByStatus = () => {
+    setGroupingOption('status');
+  };
+
+  const handleGroupByPriority = () => {
+    setGroupingOption('priority');
+  };
+
+  // Function to group tasks
+  const groupTasks = () => {
+    if (groupingOption === 'status') {
+      // Group tasks by status
+      const groupedTasks = tasks.reduce((groups, task) => {
+        const status = task.status;
+        if (!groups[status]) {
+          groups[status] = [];
+        }
+        groups[status].push(task);
+        return groups;
+      }, {});
+
+      return groupedTasks;
+    }
+
+    if (groupingOption === 'priority') {
+      // Group tasks by priority
+      const groupedTasks = tasks.reduce((groups, task) => {
+        const priority = task.priority;
+        if (!groups[priority]) {
+          groups[priority] = [];
+        }
+        groups[priority].push(task);
+        return groups;
+      }, {});
+
+      return groupedTasks;
+    }
+
+    return { 'Ungrouped': tasks }; // Default ungrouped view
+  };
+
+  const [sortingOption, setSortingOption] = useState({
+    field: null,
+    order: 'asc', // Default is ascending
+  });
+
+  const handleSortByCreated = () => {
+    setSortingOption(prevSortingOption => ({
+      field: 'created_at',
+      order: prevSortingOption.order === 'asc' ? 'desc' : 'asc',
+    }));
+  };
+
+  const sortTasks = (tasksToSort) => {
+    if (sortingOption.field === 'created_at') {
+      // Sort tasks by creation date
+      return [...tasksToSort].sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+
+        if (sortingOption.order === 'asc') {
+          return dateA - dateB;
+        } else {
+          return dateB - dateA;
+        }
+      });
+    }
+
+    return tasksToSort; // Default unsorted view
+  };
 
   return (
     <div>
       <h1>Tasks for Project {projectId}</h1>
       <button onClick={() => setIsAddPopupOpen(true)}>Add Task</button>
+      <button onClick={handleGroupByStatus}>Group by Status</button>
+      <button onClick={handleGroupByPriority}>Group by Priority</button>
+      <button onClick={handleSortByCreated}>
+        Sort by Created ({sortingOption.order === 'asc' ? 'Asc' : 'Desc'})
+      </button>
       <ul>
-        {tasks.map((task) => (
-          <li key={task.task_id}>
-            <strong>Name:</strong> {task.name}<br />
-            <Link to={`/projects/${projectId}/tasks/${task.task_id}/issues`}>
-              View Issues
-            </Link>
-            <strong>Description:</strong> {task.description}<br />
-            <strong>Status:</strong> {task.status}<br />
-            <strong>Priority:</strong> {task.priority}<br />
-            <strong>Created:</strong> {task.created_at}<br />
-            <button onClick={() => openEditPopup(task)}>Edit</button>
-            <button onClick={() => openDeletePopup(task)}>Delete</button>
-            <hr />
-          </li>
+        {Object.entries(groupTasks()).map(([groupKey, groupTasks]) => (
+          <div key={groupKey}>
+            <h3>{groupKey}</h3>
+            {sortTasks(groupTasks).map((task) => (
+              <li key={task.task_id}>
+                <strong>Name:</strong> {task.name}<br />
+                <Link to={`/projects/${projectId}/tasks/${task.task_id}/issues`}>
+                  View Issues
+                </Link>
+                <strong>Description:</strong> {task.description}<br />
+                <strong>Status:</strong> {task.status}<br />
+                <strong>Priority:</strong> {task.priority}<br />
+                <strong>Created:</strong> {task.created_at}<br />
+                <button onClick={() => openEditPopup(task)}>Edit</button>
+                <button onClick={() => openDeletePopup(task)}>Delete</button>
+                <hr />
+                <hr />
+              </li>
+            ))}
+          </div>
         ))}
       </ul>
 
