@@ -6,6 +6,7 @@ import Index from './components/Index';
 import Projects from './components/Projects';
 import ErrorPage from './pages/ErrorPage';
 import ViewTasks from './components/ViewTasks';
+import ViewIssues from './components/ViewIssues';
 const authorized = () => {
   // Check if the user is authorized
   const jwtToken = localStorage.getItem('jwtToken');
@@ -34,6 +35,10 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        <Route path="/projects/:projectId/tasks/:taskId/issues"
+          element = {<ViewIssues />} >
+        </Route>
       </Routes>
     </Router>
   );

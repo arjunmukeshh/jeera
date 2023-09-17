@@ -4,6 +4,7 @@ import Logout from './Logout';
 import AddTaskPopup from './AddTaskPopup';
 import EditTaskPopup from './EditTaskPopup'; // Added this import
 import ConfirmPopup from './ConfirmPopup';
+import { Link } from 'react-router-dom';
 const ViewTasks = () => {
   const { projectId } = useParams();
   const [tasks, setTasks] = useState([]);
@@ -113,11 +114,11 @@ const ViewTasks = () => {
             Authorization: localStorage.getItem('jwtToken'),
           },
         });
-  
+
         if (!response.ok) {
           throw new Error('Error deleting task');
         }
-  
+
         const updatedTasks = tasks.filter(task =>
           task.task_id !== taskToDelete.task_id
         );
@@ -129,7 +130,7 @@ const ViewTasks = () => {
       }
     }
   };
-  
+
 
   return (
     <div>
@@ -139,6 +140,9 @@ const ViewTasks = () => {
         {tasks.map((task) => (
           <li key={task.task_id}>
             <strong>Name:</strong> {task.name}<br />
+            <Link to={`/projects/${projectId}/tasks/${task.task_id}/issues`}>
+              View Issues
+            </Link>
             <strong>Description:</strong> {task.description}<br />
             <strong>Status:</strong> {task.status}<br />
             <strong>Priority:</strong> {task.priority}<br />
