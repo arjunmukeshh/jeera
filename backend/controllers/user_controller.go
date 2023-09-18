@@ -12,10 +12,45 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+func GetUserDetails(c *fiber.Ctx) error {
+	var user models.User
+	username := c.Params("username")
+	config.DB.Raw(`select * from Users where username = ?`, username).Scan(&user)
+	return c.JSON(&user)
+}
 func GetAllUsers(c *fiber.Ctx) error {
 	var Users []models.User
 	config.DB.Table("Users").Find(&Users)
 	return c.JSON(&Users)
+}
+
+func UpdateUserStatus(c *fiber.Ctx) error {
+	username := c.Params("username")
+
+	var request struct {
+		Active string `json:"active"`
+	}
+
+	if err := c.BodyParser(&request); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+
+	var user models.User
+	if result := config.DB.Table("Users").Where("username = ?", username).First(&user); result.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": "User not found",
+		})
+	}
+
+	// Update user status
+	user.Active = request.Active
+	config.DB.Table("Users").Model(&user).Update("active", request.Active)
+
+	return c.JSON(fiber.Map{
+		"message": "User status updated successfully",
+	})
 }
 
 func Login(c *fiber.Ctx) error {
@@ -47,6 +82,14 @@ func Login(c *fiber.Ctx) error {
 		return c.Status(404).JSON(fiber.Map{
 			"success": false,
 			"message": "User Not found",
+			"error":   map[string]interface{}{},
+		})
+	}
+
+	if user.Active == "0" {
+		return c.Status(405).JSON(fiber.Map{
+			"success": false,
+			"message": "User not active",
 			"error":   map[string]interface{}{},
 		})
 	}

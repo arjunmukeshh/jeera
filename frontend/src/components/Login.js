@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -41,24 +41,28 @@ const Login = () => {
       localStorage.setItem('jwtToken', token);
       localStorage.setItem('username', formData.username);
       // Redirect to the Projects page upon successful login
-      navigate('/projects');
+      navigate('/dashboard');
     } catch (error) {
-      console.error(error);
+      setError(error.message)
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Username:</label>
-        <input type="text" name="username" value={formData.username} onChange={handleChange} />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" name="password" value={formData.password} onChange={handleChange} />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
+          <input type="text" name="username" value={formData.username} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" name="password" value={formData.password} onChange={handleChange} />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+
+      {error && <div>Error: {error}</div>}
+    </>
   );
 };
 

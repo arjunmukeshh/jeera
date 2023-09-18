@@ -7,4 +7,5 @@ type User struct {
 	EmailID  string `gorm:"unique;not null" json:"email_id"`
 	Password string `gorm:"not null" json:"password"`
 	IsAdmin  bool   `gorm:"column:isAdmin;default:false" json:"isAdmin"`
+	Active   string `gorm:"default:1" json:"active"`
 }

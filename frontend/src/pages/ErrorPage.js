@@ -5,7 +5,7 @@ const ErrorPage = () => {
     <div>
       <h1>Error: Access Denied</h1>
       <p>Your access has expired or you don't have permission to view this page.</p>
-      {/* Add any additional information or links here */}
+      <p>Please contact your admin</p>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Logout from './Logout';
-import Modal from 'react-modal'
 import AddProjectPopup from './AddProjectPopup';
 import AddTeamModal from './AddTeamToProjectModal';
 import '../css/AddProjectPopup.css';
@@ -8,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-
+    const [isAdmin, setIsAdmin] = useState(false);
     const [projectTeams, setProjectTeams] = useState({});
 
 
@@ -71,6 +70,30 @@ const Projects = () => {
 
         fetchProjectTeams();
     }, [projects]);
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/users/${localStorage.getItem('username')}/details`, {
+                    headers: {
+                        Authorization: localStorage.getItem('jwtToken'),
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error fetching user details');
+                }
+
+                const data = await response.json();
+
+                setIsAdmin(data.isAdmin); // Set isAdmin state based on response
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        };
+
+        fetchUserDetails();
+    }, []);
 
     const handleAddProject = async (newProject) => {
         try {
@@ -218,6 +241,7 @@ const Projects = () => {
     return (
         <div>
             <h1>Your Projects</h1>
+            {isAdmin && <h2><Link to="/users">Users</Link></h2>}
             <h2><Link to="/teams">Edit Teams</Link></h2>
             <h2><Link to="/register">Register User(s)</Link></h2>
             <button onClick={() => setIsPopupOpen(true)}>Add Project</button>

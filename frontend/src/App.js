@@ -9,6 +9,10 @@ import ViewTasks from './components/ViewTasks';
 import ViewIssues from './components/ViewIssues';
 import Teams from './components/Teams';
 import ViewTeamMembers from './components/ViewTeamMembers';
+import Users from './components/Users';
+import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
+
 const authorized = () => {
   // Check if the user is authorized
   const jwtToken = localStorage.getItem('jwtToken');
@@ -25,6 +29,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/dashboard" element={<HomePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/error" element={<ErrorPage />} />
@@ -37,7 +43,7 @@ function App() {
             </PrivateRoute>
           }
         />
-
+        <Route path="/users" element={<Users />} ></Route>
         <Route path="/projects/:projectId/tasks/:taskId/issues"
           element = {<ViewIssues />} >
         </Route>
