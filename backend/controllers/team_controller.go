@@ -79,14 +79,14 @@ func ViewTeamMembers(c *fiber.Ctx) error {
 
 	fmt.Print(teamMembers)
 	// Fetch usernames based on user IDs
-	var usernames []string
+	var usernames []models.User
 	for _, member := range teamMembers {
 		var user models.User
 		result := config.DB.Table("Users").First(&user, member.UserID)
 		if result.Error != nil {
 			continue // Skip if user not found
 		}
-		usernames = append(usernames, user.Username)
+		usernames = append(usernames, user)
 	}
 
 	return c.JSON(fiber.Map{

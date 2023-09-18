@@ -7,6 +7,8 @@ import Projects from './components/Projects';
 import ErrorPage from './pages/ErrorPage';
 import ViewTasks from './components/ViewTasks';
 import ViewIssues from './components/ViewIssues';
+import Teams from './components/Teams';
+import ViewTeamMembers from './components/ViewTeamMembers';
 const authorized = () => {
   // Check if the user is authorized
   const jwtToken = localStorage.getItem('jwtToken');
@@ -39,6 +41,9 @@ function App() {
         <Route path="/projects/:projectId/tasks/:taskId/issues"
           element = {<ViewIssues />} >
         </Route>
+
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/teams/:teamId/members" element={<ViewTeamMembers/>} />
       </Routes>
     </Router>
   );
