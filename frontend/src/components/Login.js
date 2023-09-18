@@ -39,7 +39,7 @@ const Login = () => {
       const token = data.Authorization;
       // Store the token in localStorage
       localStorage.setItem('jwtToken', token);
-
+      localStorage.setItem('username', formData.username);
       // Redirect to the Projects page upon successful login
       navigate('/projects');
     } catch (error) {

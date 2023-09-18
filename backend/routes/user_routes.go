@@ -11,6 +11,8 @@ func SetupUserRoutes(app *fiber.App) {
 	app.Post("/user/:username/login", controllers.Login)
 	app.Post("/user/:username/logout", controllers.Logout)
 	app.Post("/user/register", controllers.RegisterUser)
+	app.Delete("/users/:username", controllers.DeleteUserByUsername)
+
 }
 
 func SetupProtectedUserRoutes(app *fiber.App) {

@@ -15,6 +15,23 @@ func GetAllProjects(c *fiber.Ctx) error {
 	return c.JSON(&Projects)
 }
 
+func GetProjectsByUser(c *fiber.Ctx) error {
+	username := c.Params("username")
+
+	var admin bool
+	var projects []models.Project
+	config.DB.Raw(`select isAdmin from Users where username=?`, username).First(&admin)
+	if admin {
+		config.DB.Raw(`select * from Projects`).Scan(&projects)
+	} else {
+		config.DB.Raw(`
+		select * from Projects where project_id IN(select project_id from Projects_Teams where teamname IN(select name from Teams where team_id IN (select team_id from Team_Members where user_id=(select user_id from Users where username=?))))
+	`, username).Scan(&projects)
+	}
+
+	return c.JSON(&projects)
+}
+
 func GetProject(c *fiber.Ctx) error {
 	var Project models.Project
 	project_id := c.Params("project_id")

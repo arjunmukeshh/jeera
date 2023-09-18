@@ -8,6 +8,7 @@ func SetupRoutes(app *fiber.App) {
 	SetupTaskRoutes(app)
 	SetupIssueRoutes(app)
 	SetupTeamRoutes(app)
+	SetupProjectTeamsRoutes(app)
 }
 
 func SetupProtectedRoutes(app *fiber.App) {

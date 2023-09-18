@@ -11,6 +11,8 @@ func SetupProjectRoutes(app *fiber.App) {
 	app.Post("/projects/add", controllers.AddProject)
 	app.Get("/projects/delete/:id", controllers.DeleteProject)  //ToBe Protected
 	app.Post("/projects/update/:id", controllers.UpdateProject) //ToBe Protected
+	app.Get("/user/:username/projects", controllers.GetProjectsByUser)
+
 }
 
 func SetupProtectedProjectRoutes(app *fiber.App) {

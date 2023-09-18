@@ -79,6 +79,7 @@ func Login(c *fiber.Ctx) error {
 		"success": true,
 		"message": "Success",
 		"data":    userData,
+		"isAdmin": user.IsAdmin,
 	})
 }
 
@@ -186,5 +187,41 @@ func RegisterUser(c *fiber.Ctx) error {
 	return c.Status(201).JSON(fiber.Map{
 		"success": true,
 		"message": "User registered successfully",
+	})
+}
+
+func DeleteUserByUsername(c *fiber.Ctx) error {
+	username := c.Params("username")
+
+	// Check if username is provided
+	if username == "" {
+		return c.Status(400).JSON(fiber.Map{
+			"success": false,
+			"message": "Username is required",
+		})
+	}
+
+	var user models.User
+	config.DB.Table("Users").Where("username = ?", username).First(&user)
+
+	// Check if user exists
+	if user.Username == "" {
+		return c.Status(404).JSON(fiber.Map{
+			"success": false,
+			"message": "User Not found",
+		})
+	}
+
+	// Delete the user from the database
+	if err := config.DB.Table("Users").Where("username = ?", username).Delete(&user).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"success": false,
+			"message": "Failed to delete user",
+		})
+	}
+
+	return c.Status(200).JSON(fiber.Map{
+		"success": true,
+		"message": "User deleted successfully",
 	})
 }
