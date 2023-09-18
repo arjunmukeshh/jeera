@@ -20,11 +20,6 @@ services:
       timeout: 20s
       retries: 10
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
 
   backend:
     image: backend
@@ -37,9 +32,29 @@ services:
     depends_on:
       db:
         condition: service_healthy
+   
 
-
-
+  frontend:
+    image: frontend
+    container_name: frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3006:3006
+    depends_on:
+      - backend
+   
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+      - frontend
 
 networks:
   jeera_network:
