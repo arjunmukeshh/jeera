@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import Logout from './Logout';
 import AddIssuePopup from './AddIssuePopup';
 import EditIssuePopup from './EditIssuePopup';
+import Papa from 'papaparse'
+
 const ViewIssues = () => {
     const { projectId, taskId } = useParams();
     const [issues, setIssues] = useState([]);
@@ -143,12 +145,52 @@ const ViewIssues = () => {
         }));
     };
 
+    const changeHandler = (event) => {
+        // Passing file data (event.target.files[0]) to parse using Papa.parse
+        Papa.parse(event.target.files[0], {
+            header: true,
+            skipEmptyLines: true,
+            complete: async function (results) {
+                const { data } = results;
+
+                for (const issue of data) {
+                    try {
+                        const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks/${taskId}/issues/add`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: localStorage.getItem('jwtToken'),
+                            },
+                            body: JSON.stringify(issue),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Error adding issue: ${issue.name}`);
+                        }
+
+                        const addedIssue = await response.json();
+                        setIssues([...issues, addedIssue]);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            },
+        });
+    };
+
+
     const groupedIssues = getGroupedIssues();
     return (
         <div>
             <h1>Issues for Task {taskId}</h1>
             <button onClick={() => setIsAddPopupOpen(true)}>Add Issue</button>
-
+            <input
+                type="file"
+                name="file"
+                accept=".csv"
+                onChange={changeHandler}
+                style={{ display: "block", margin: "10px auto" }}
+            /><br />
             <div>
                 <button onClick={groupIssuesByStatus}>Group by Status</button>
                 <button onClick={groupIssuesByPriority}>Group by Priority</button>
@@ -205,7 +247,7 @@ const ViewIssues = () => {
                     ))}
                 </ul>
             )}
-            
+
             {isEditPopupOpen && (
                 <EditIssuePopup
                     onClose={closeEditPopup}

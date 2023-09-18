@@ -111,6 +111,7 @@ const Projects = () => {
     return (
         <div>
             <h1>Your Projects</h1>
+            <h2><Link to="/register">Register User</Link></h2>
             <button onClick={() => setIsPopupOpen(true)}>Add Project</button>
             <ul>
                 {projects.map((project) => (

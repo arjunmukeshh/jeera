@@ -4,6 +4,8 @@ import Logout from './Logout';
 import AddTaskPopup from './AddTaskPopup';
 import EditTaskPopup from './EditTaskPopup'; // Added this import
 import ConfirmPopup from './ConfirmPopup';
+import Papa from 'papaparse'
+
 import { Link } from 'react-router-dom';
 const ViewTasks = () => {
   const { projectId } = useParams();
@@ -204,6 +206,38 @@ const ViewTasks = () => {
     return tasksToSort; // Default unsorted view
   };
 
+  const changeHandler = async (event) => {
+    Papa.parse(event.target.files[0], {
+      header: true,
+      skipEmptyLines: true,
+      complete: async function (results) {
+        const tasksToAdd = results.data;
+        for (const task of tasksToAdd) {
+          try {
+            const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: localStorage.getItem('jwtToken'),
+              },
+              body: JSON.stringify(task),
+            });
+
+            if (!response.ok) {
+              throw new Error('Error adding task');
+            }
+
+            const addedTask = await response.json();
+            setTasks([...tasks, addedTask]);
+          } catch (error) {
+            console.error('Error adding task:', error);
+          }
+        }
+      },
+    });
+  };
+
+
   return (
     <div>
       <h1>Tasks for Project {projectId}</h1>
@@ -213,6 +247,13 @@ const ViewTasks = () => {
       <button onClick={handleSortByCreated}>
         Sort by Created ({sortingOption.order === 'asc' ? 'Asc' : 'Desc'})
       </button>
+      <input
+        type="file"
+        name="file"
+        accept=".csv"
+        onChange={changeHandler}
+        style={{ display: "block", margin: "10px auto" }}
+      />
       <ul>
         {Object.entries(groupTasks()).map(([groupKey, groupTasks]) => (
           <div key={groupKey}>
@@ -222,7 +263,7 @@ const ViewTasks = () => {
                 <strong>Name:</strong> {task.name}<br />
                 <Link to={`/projects/${projectId}/tasks/${task.task_id}/issues`}>
                   View Issues
-                </Link>
+                </Link><br />
                 <strong>Description:</strong> {task.description}<br />
                 <strong>Status:</strong> {task.status}<br />
                 <strong>Priority:</strong> {task.priority}<br />
