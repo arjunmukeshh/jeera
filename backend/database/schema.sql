@@ -1,6 +1,6 @@
 --MySQL schema that is 3NF normalised
 
--- Create the Users table
+-- Create the Users tabl
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
