@@ -15,6 +15,8 @@ docker-compose up --build
 
 on your browser, open localhost:3000 to view the application! 
 
+if this doesnt work, try feature/reverse_proxy and follow same steps.
 
+close any MySQL port that is already running. go to task manager and search for mysqld.
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/M4NvrXuV)
