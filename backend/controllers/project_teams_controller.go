@@ -46,7 +46,7 @@ func AddTeamToProject(c *fiber.Ctx) error {
 
 	fmt.Print(projectTeam)
 	// Check if project ID, team name, and write value are provided
-	if projectTeam.ProjectID == "" || projectTeam.Teamname == "" || projectTeam.Write == "" {
+	if projectTeam.ProjectID == "" || projectTeam.Teamname == "" {
 		return c.Status(400).JSON(fiber.Map{
 			"success": false,
 			"message": "Project ID, Team Name, and Write value are required",
@@ -86,4 +86,23 @@ func DeleteProjectsTeam(c *fiber.Ctx) error {
 		"success": true,
 		"message": "Entry deleted successfully",
 	})
+}
+
+func GetProjectTeamsByUserIDAndProjectID(c *fiber.Ctx) error {
+	userID := c.Params("user_id")
+	projectID := c.Params("project_id")
+
+	if userID == "" || projectID == "" {
+		return c.Status(400).JSON(fiber.Map{
+			"success": false,
+			"message": "User ID and Project ID are required",
+		})
+	}
+
+	var projectTeams []models.ProjectsTeams
+
+	// Assuming you have a model called `Projects_Teams` with fields `project_id`, `teamname`, and `write`
+	config.DB.Raw(`select * from Projects_Teams where project_id=? and teamname IN(select name from Teams where team_id IN(select team_id from Team_Members where user_id=?))`, projectID, userID).Scan(&projectTeams)
+
+	return c.JSON(&projectTeams)
 }

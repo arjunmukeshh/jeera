@@ -2,12 +2,27 @@ import React, { useState, useEffect } from 'react';
 import Logout from './Logout';
 import AddProjectPopup from './AddProjectPopup';
 import AddTeamModal from './AddTeamToProjectModal';
-import '../css/AddProjectPopup.css';
 import { Link } from 'react-router-dom';
+import {
+    Button,
+    Card,
+    CardContent,
+    Typography,
+    Grid,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import Header from './Header';
+
+const ProjectCard = styled(Card)({
+    marginBottom: '20px',
+});
+
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [maintainer_id, setIsMaintainer] = useState(0);
+    const [user_id, setUser] = useState(0);
     const [projectTeams, setProjectTeams] = useState({});
 
 
@@ -33,6 +48,13 @@ const Projects = () => {
                         </div>
                     )
                 setProjects(data);
+                data.forEach((project) => {
+                    const { project_id, maintainer_id } = project;
+                    localStorage.setItem(`project_${project_id}_maintainer`, maintainer_id);
+
+                });
+
+
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }
@@ -85,7 +107,10 @@ const Projects = () => {
                 }
 
                 const data = await response.json();
+                localStorage.setItem('user_id', data.user_id)
+                localStorage.setItem('isAdmin', isAdmin)
 
+                setUser(data.user_id);
                 setIsAdmin(data.isAdmin); // Set isAdmin state based on response
             } catch (error) {
                 console.error('Error fetching user details:', error);
@@ -240,33 +265,61 @@ const Projects = () => {
 
     return (
         <div>
+            <Header />
             <h1>Your Projects</h1>
             {isAdmin && <h2><Link to="/users">Users</Link></h2>}
-            <h2><Link to="/teams">Edit Teams</Link></h2>
-            <h2><Link to="/register">Register User(s)</Link></h2>
-            <button onClick={() => setIsPopupOpen(true)}>Add Project</button>
-            <ul>
+            {isAdmin && <h2><Link to="/teams">Edit Teams</Link></h2>}
+            {isAdmin && <h2><Link to="/register">Register User(s)</Link></h2>}
+            <button variant="contained" onClick={() => setIsPopupOpen(true)}>Add Project</button>
+            <Grid container spacing={2}>
                 {projects.map((project) => (
-                    <li key={project.project_id}>
-                        <strong>Name:</strong> {project.name}<br />
-                        <Link to={`/projects/${project.project_id}/tasks`}>View Tasks</Link><br />
-                        <strong>Description:</strong> {project.description}<br />
-                        <button onClick={() => openTeamModal(project)}>Add Team</button><br />
-                        <strong>Teams:</strong> {projectTeams[project.project_id]?.map(team => (
-                            <div key={team.team_id}>
-                                Team Name: {team.name}, Description: {team.description}
-                                <button onClick={() => handleDeleteTeam(project.project_id, team.name)}>Delete Team</button>
-                            </div>
-                        ))}
+                    <Grid item xs={12} key={project.project_id}>
+                        <ProjectCard>
+                            <CardContent>
+                                <Typography variant="h5">
+                                    <strong>Name:</strong> {project.name}
+                                </Typography>
+                                <Typography variant="body1">
+                                    <Link to={`/projects/${project.project_id}/tasks`}>
+                                        View Tasks
+                                    </Link>
+                                </Typography>
+                                <Typography variant="body1">
+                                    <strong>Description:</strong> {project.description}
+                                </Typography>
+                                {(isAdmin || project.maintainer_id == user_id) && (
+                                    <Button variant="contained" onClick={() => openTeamModal(project)}>
+                                        Add Team
+                                    </Button>
+                                )}
 
-                        <strong>Maintainer ID:</strong> {project.maintainer_id}<br />
-                        <strong>Created At:</strong> {new Date(project.created_at).toLocaleString()}<br />
-                        <button onClick={() => handleRemoveProject(project.project_id)}>Remove</button>
-                        <button onClick={() => openEditPopup(project)}>Edit</button>
-                        <hr />
-                    </li>
+                                <strong>Teams:</strong> {projectTeams[project.project_id]?.map(team => (
+                                    <div key={team.team_id}>
+                                        Team Name: {team.name}, Description: {team.description}
+                                        {(isAdmin || project.maintainer_id == user_id) && <button onClick={() => handleDeleteTeam(project.project_id, team.name)}>Delete Team</button>}
+                                    </div>
+                                ))}
+                                <Typography variant="body1">
+                                    <strong>Maintainer ID:</strong> {project.maintainer_id}
+                                </Typography>
+                                <Typography variant="body1">
+                                    <strong>Created At:</strong> {new Date(project.created_at).toLocaleString()}
+                                </Typography>
+                                {(isAdmin || project.maintainer_id == user_id) && (
+                                    <Button variant="contained" onClick={() => handleRemoveProject(project.project_id)}>
+                                        Remove
+                                    </Button>
+                                )}
+                                {(isAdmin || project.maintainer_id == user_id) && (
+                                    <Button variant="contained" onClick={() => openEditPopup(project)}>
+                                        Edit
+                                    </Button>
+                                )}
+                            </CardContent>
+                        </ProjectCard>
+                    </Grid>
                 ))}
-            </ul>
+            </Grid>
 
             {isPopupOpen && (
                 <AddProjectPopup
@@ -285,7 +338,7 @@ const Projects = () => {
                     onAddTeam={handleAddTeam}
                 />
             )}
-
+            <br />
             <Logout />
         </div>
     );

@@ -3,11 +3,12 @@ import Modal from 'react-modal';
 
 const AddTeamModal = ({ isOpen, onClose, projectId, onAddTeam }) => {
   const [teamname, setteamname] = useState('');
-  const [write, setWrite] = useState("0");
+  const [writeTasks, setWriteTasks] = useState("0");
+  const [writeIssues, setWriteIssues] = useState("0");
 
   const handleAddTeam = () => {
     // Send a request to the API
-    onAddTeam(projectId, { teamname, write });
+    onAddTeam(projectId, { teamname, writeTasks, writeIssues });
     // Close the modal
     onClose();
   };
@@ -33,14 +34,26 @@ const AddTeamModal = ({ isOpen, onClose, projectId, onAddTeam }) => {
             </div>
           </div>
           <div className="field">
-            <label className="label">Write (0 for false, 1 for true)</label>
+            <label className="label">Write Tasks (0 for false, 1 for true)</label>
             <div className="control">
               <input
                 className="input"
                 type="text"
-                placeholder="Write"
-                value={write}
-                onChange={(e) => setWrite(e.target.value)}
+                placeholder="Write Tasks"
+                value={writeTasks}
+                onChange={(e) => setWriteTasks(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">Write Issues (0 for false, 1 for true)</label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                placeholder="Write Issues"
+                value={writeIssues}
+                onChange={(e) => setWriteIssues(e.target.value)}
               />
             </div>
           </div>

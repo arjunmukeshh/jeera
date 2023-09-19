@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
-import Index from './components/Index';
 import Projects from './components/Projects';
 import ErrorPage from './pages/ErrorPage';
 import ViewTasks from './components/ViewTasks';
@@ -12,6 +11,7 @@ import ViewTeamMembers from './components/ViewTeamMembers';
 import Users from './components/Users';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
+import LandingPage from './pages/LandingPage';
 
 const authorized = () => {
   // Check if the user is authorized
@@ -28,7 +28,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Index />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<Login />} />
@@ -38,9 +38,9 @@ function App() {
         <Route
           path="/projects"
           element={
-            <PrivateRoute>
+            // <PrivateRoute>
               <Projects />
-            </PrivateRoute>
+            // </PrivateRoute>
           }
         />
         <Route path="/users" element={<Users />} ></Route>

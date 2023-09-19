@@ -2,11 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Logout from './Logout';
 import AddTaskPopup from './AddTaskPopup';
-import EditTaskPopup from './EditTaskPopup'; // Added this import
+import EditTaskPopup from './EditTaskPopup';
 import ConfirmPopup from './ConfirmPopup';
-import Papa from 'papaparse'
-
+import Papa from 'papaparse';
 import { Link } from 'react-router-dom';
+import {
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Grid,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import Header from './Header';
+
+const TaskCard = styled(Card)(({ taskStatus }) => ({
+  backgroundColor: taskStatus === 'to do' ? '#FF0000' : // red for to do
+    taskStatus === 'in progress' ? '#FF4500' : // orange for In Progress
+      taskStatus === 'done' ? '#32CD32' : // green for done
+        'transparent', // Default transparent
+  color: '#fff',
+  marginBottom: '10px',
+}));
+
+const TaskCardContent = styled(CardContent)({
+  paddingBottom: '16px !important', // Override MUI styles
+});
+
 const ViewTasks = () => {
   const { projectId } = useParams();
   const [tasks, setTasks] = useState([]);
@@ -14,6 +37,9 @@ const ViewTasks = () => {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
+  const isAdmin = localStorage.getItem('isAdmin')
+  const user_id = localStorage.getItem('user_id')
+  var maintainer_id;
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -28,7 +54,24 @@ const ViewTasks = () => {
         }
 
         const data = await response.json();
+        maintainer_id = localStorage.getItem(`project_${projectId}_maintainer`)
         setTasks(data.data);
+
+        const projectTeamsResponse = await fetch(`http://localhost:3000/projects/${user_id}/${projectId}`, {
+          headers: {
+            Authorization: localStorage.getItem('jwtToken'),
+          },
+        });
+
+        if (!projectTeamsResponse.ok) {
+          throw new Error('Error fetching project teams');
+        }
+
+        const projectTeamsData = await projectTeamsResponse.json();
+
+        // Set writeTasks and writeIssues in local storage
+        localStorage.setItem(`writeTasks`, projectTeamsData.writeTasks);
+        localStorage.setItem(`writeIssues`, projectTeamsData.writeIssues);
       } catch (error) {
         console.error('Error fetching tasks:', error);
       }
@@ -78,7 +121,8 @@ const ViewTasks = () => {
         task.task_id === editedTask.task_id ? editedTask : task
       );
       setTasks(updatedTasks);
-      setSelectedTask(null); // Clear selected task after successful edit
+      setSelectedTask(null);
+      setIsEditPopupOpen(false);
     } catch (error) {
       console.error('Error editing task:', error);
     }
@@ -93,6 +137,7 @@ const ViewTasks = () => {
     setSelectedTask(null); // Clear selected task
     setIsEditPopupOpen(false); // Close the edit popup
   };
+
 
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
@@ -237,46 +282,70 @@ const ViewTasks = () => {
     });
   };
 
-
+  localStorage.setItem('maintainer_id', projectId.maintaine)
   return (
     <div>
+      <Header />
       <h1>Tasks for Project {projectId}</h1>
-      <button onClick={() => setIsAddPopupOpen(true)}>Add Task</button>
+      {(isAdmin || maintainer_id == user_id) && <button onClick={() => setIsAddPopupOpen(true)}>Add Task</button>}
       <button onClick={handleGroupByStatus}>Group by Status</button>
       <button onClick={handleGroupByPriority}>Group by Priority</button>
       <button onClick={handleSortByCreated}>
         Sort by Created ({sortingOption.order === 'asc' ? 'Asc' : 'Desc'})
       </button>
-      <input
+      {isAdmin && <input
         type="file"
         name="file"
         accept=".csv"
         onChange={changeHandler}
         style={{ display: "block", margin: "10px auto" }}
       />
-      <ul>
+      }
+      <Grid container spacing={2}>
         {Object.entries(groupTasks()).map(([groupKey, groupTasks]) => (
-          <div key={groupKey}>
+          <Grid item xs={12} key={groupKey}>
             <h3>{groupKey}</h3>
             {sortTasks(groupTasks).map((task) => (
-              <li key={task.task_id}>
-                <strong>Name:</strong> {task.name}<br />
-                <Link to={`/projects/${projectId}/tasks/${task.task_id}/issues`}>
-                  View Issues
-                </Link><br />
-                <strong>Description:</strong> {task.description}<br />
-                <strong>Status:</strong> {task.status}<br />
-                <strong>Priority:</strong> {task.priority}<br />
-                <strong>Created:</strong> {task.created_at}<br />
-                <button onClick={() => openEditPopup(task)}>Edit</button>
-                <button onClick={() => openDeletePopup(task)}>Delete</button>
-                <hr />
-                <hr />
-              </li>
+              <TaskCard key={task.task_id} taskStatus={task.status}>
+                <TaskCardContent>
+                  <Typography variant="h5">
+                    <strong>Name:</strong> {task.name}
+                  </Typography>
+                  <Typography variant="body1">
+                    <Link to={`/projects/${projectId}/tasks/${task.task_id}/issues`}>
+                      View Issues
+                    </Link>
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Description:</strong> {task.description}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Status:</strong> {task.status}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Priority:</strong> {task.priority}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Created:</strong> {task.created_at}
+                  </Typography>
+                </TaskCardContent>
+                <CardActions>
+                  {(isAdmin || maintainer_id == user_id || localStorage.getItem("writeTasks") == "1") && (
+                    <Button variant="contained" onClick={() => openEditPopup(task)}>
+                      Edit
+                    </Button>
+                  )}
+                  {(isAdmin || maintainer_id == user_id) && (
+                    <Button variant="contained" onClick={() => openDeletePopup(task)}>
+                      Delete
+                    </Button>
+                  )}
+                </CardActions>
+              </TaskCard>
             ))}
-          </div>
+          </Grid>
         ))}
-      </ul>
+      </Grid>
 
       {isAddPopupOpen && (
         <AddTaskPopup
@@ -287,11 +356,13 @@ const ViewTasks = () => {
 
       {isEditPopupOpen && (
         <EditTaskPopup
+          isOpen={isEditPopupOpen}
           onClose={closeEditPopup}
           onUpdateTask={handleEditTask}
           taskToEdit={selectedTask}
         />
       )}
+
 
       {isDeletePopupOpen && (
         <ConfirmPopup

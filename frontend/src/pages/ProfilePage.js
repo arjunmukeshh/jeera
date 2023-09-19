@@ -1,5 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import { Button, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+const GradientContainer = styled('div')({
+    background: 'linear-gradient(45deg, #FF4500, #000000)',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#fff',
+});
+
+const ProfileContent = styled('div')({
+    textAlign: 'center',
+    padding: '20px',
+    border: '2px solid #fff',
+    borderRadius: '10px',
+    background: 'rgba(255, 255, 255, 0.1)',
+    backdropFilter: 'blur(10px)',
+    marginBottom: '20px',
+});
+
+const ProfileButton = styled(Button)({
+    margin: '10px',
+    fontSize: '16px',
+});
 
 const Profile = () => {
     const [userData, setUserData] = useState(null);
@@ -79,17 +106,21 @@ const Profile = () => {
 
     return (
         <div>
-            <h1>Profile Page</h1>
-            {userData && (
-                <div>
-                    <p><strong>Username:</strong> {userData.username}</p>
-                    <p><strong>Email:</strong> {userData.email_id}</p>
-                    <p><strong>Full Name:</strong> {userData.full_name}</p>
-                    <p><strong>Account Status:</strong> {userData.active}</p>
-                    <button onClick={handleDeleteAccount}>Delete Account</button>
-                    <button onClick={handleDeactivateAccount}>Deactivate Account</button>
-                </div>
-            )}
+            <Header />
+            <GradientContainer>
+                
+                <h1>Profile Page</h1>
+                {userData && (
+                    <ProfileContent>
+                        <Typography variant="h5"><strong>Username:</strong> {userData.username}</Typography>
+                        <Typography variant="h5"><strong>Email:</strong> {userData.email_id}</Typography>
+                        <Typography variant="h5"><strong>Full Name:</strong> {userData.full_name}</Typography>
+                        <Typography variant="h5"><strong>Account Status:</strong> {userData.active}</Typography>
+                        <ProfileButton variant="contained" onClick={handleDeleteAccount}>Delete Account</ProfileButton>
+                        <ProfileButton variant="contained" onClick={handleDeactivateAccount}>Deactivate Account</ProfileButton>
+                    </ProfileContent>
+                )}
+            </GradientContainer>
         </div>
     );
 }

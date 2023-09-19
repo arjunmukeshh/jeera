@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import Header from './Header';
 const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -35,12 +36,9 @@ const Login = () => {
 
       const data = await response.json();
 
-      // Assuming the token is returned in the response as 'token'
       const token = data.Authorization;
-      // Store the token in localStorage
       localStorage.setItem('jwtToken', token);
       localStorage.setItem('username', formData.username);
-      // Redirect to the Projects page upon successful login
       navigate('/dashboard');
     } catch (error) {
       setError(error.message)
@@ -49,19 +47,43 @@ const Login = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+    <Header />
+    <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 8 }}>
+      
+      <Typography variant="h4" component="h1" gutterBottom sx={{ color: '#000000'}}>
+        Login
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit}>
         <div>
-          <label>Username:</label>
-          <input type="text" name="username" value={formData.username} onChange={handleChange} />
+          <TextField
+            label="Username"
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            variant="outlined"
+            fullWidth
+            margin="normal"
+          />
         </div>
         <div>
-          <label>Password:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
+          <TextField
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            variant="outlined"
+            fullWidth
+            margin="normal"
+          />
         </div>
-        <button type="submit">Login</button>
-      </form>
-
-      {error && <div>Error: {error}</div>}
+        <Button type="submit" variant="contained" sx={{ mt: 2, bgcolor: '#FFA500', color: '#fff' }}>
+          Login
+        </Button>
+      </Box>
+      {error && <Typography color="error" sx={{ mt: 2 }}>{`Error: ${error}`}</Typography>}
+    </Container>
     </>
   );
 };

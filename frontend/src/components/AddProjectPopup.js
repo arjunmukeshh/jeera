@@ -56,6 +56,7 @@ const AddProjectPopup = ({ onClose, onAddProject, projectToUpdate, onUpdateProje
             required
           />
           <br />
+          <label>Maintainer's user id</label>
           <input
             type="number"
             name="maintainer_id"

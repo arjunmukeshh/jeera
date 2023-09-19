@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const AddIssuePopup = ({ onClose, onAddIssue }) => {
   const [newIssue, setNewIssue] = useState({
-    issue_type_id: 0,
+    issue_type_id: 1,
     summary: '',
     attachments: '',
     description: '',
@@ -36,6 +36,8 @@ const AddIssuePopup = ({ onClose, onAddIssue }) => {
             type="number"
             name="issue_type_id"
             value={newIssue.issue_type_id}
+            min="1"
+            max="4"
             onChange={handleInputChange}
             placeholder="Issue Type ID"
             required

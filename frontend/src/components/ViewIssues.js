@@ -9,7 +9,9 @@ const ViewIssues = () => {
     const { projectId, taskId } = useParams();
     const [issues, setIssues] = useState([]);
     const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
-
+    const isAdmin = localStorage.getItem('isAdmin');
+    const user_id = localStorage.getItem('user_id');
+    var maintainer_id;
     useEffect(() => {
         const fetchIssues = async () => {
             try {
@@ -24,6 +26,7 @@ const ViewIssues = () => {
                 }
 
                 const data = await response.json();
+                maintainer_id = localStorage.getItem(`project_${projectId}_maintainer`);
                 setIssues(data);
             } catch (error) {
                 console.error('Error fetching issues:', error);
@@ -183,14 +186,16 @@ const ViewIssues = () => {
     return (
         <div>
             <h1>Issues for Task {taskId}</h1>
-            <button onClick={() => setIsAddPopupOpen(true)}>Add Issue</button>
-            <input
-                type="file"
-                name="file"
-                accept=".csv"
-                onChange={changeHandler}
-                style={{ display: "block", margin: "10px auto" }}
-            /><br />
+            {(isAdmin || user_id == maintainer_id) && <div><button onClick={() => setIsAddPopupOpen(true)}>Add Issue</button>
+                <input
+                    type="file"
+                    name="file"
+                    accept=".csv"
+                    onChange={changeHandler}
+                    style={{ display: "block", margin: "10px auto" }}
+                />
+            </div>
+            }<br />
             <div>
                 <button onClick={groupIssuesByStatus}>Group by Status</button>
                 <button onClick={groupIssuesByPriority}>Group by Priority</button>
@@ -218,8 +223,8 @@ const ViewIssues = () => {
                                         <strong>Priority:</strong> {issue.priority}<br />
                                         <strong>Label:</strong> {issue.label}<br />
                                         <strong>Status:</strong> {issue.status}<br />
-                                        <button onClick={() => openEditPopup(issue)}>Edit</button><br />
-                                        <button onClick={() => handleDeleteIssue(issue.issue_id)}>Delete</button><br />
+                                        {(isAdmin || user_id == maintainer_id || localStorage.getItem("writeIssues")=="1") && <button onClick={() => openEditPopup(issue)}>Edit</button>}<br />
+                                        {(isAdmin || user_id == maintainer_id) && <button onClick={() => handleDeleteIssue(issue.issue_id)}>Delete</button>}<br />
                                         <hr />
                                     </li>
                                 ))}
@@ -240,8 +245,9 @@ const ViewIssues = () => {
                             <strong>Priority:</strong> {issue.priority}<br />
                             <strong>Label:</strong> {issue.label}<br />
                             <strong>Status:</strong> {issue.status}<br />
-                            <button onClick={() => openEditPopup(issue)}>Edit</button><br />
-                            <button onClick={() => handleDeleteIssue(issue.issue_id)}>Delete</button><br />
+                            {(isAdmin || user_id == maintainer_id || issue.reports_to==user_id || issue.assignee_id==user_id) && <div><button onClick={() => openEditPopup(issue)}>Edit</button><br /></div>}
+                            {(isAdmin || maintainer_id==user_id || issue.reports_to==user_id) &&  <div> <button onClick={() => handleDeleteIssue(issue.issue_id)}>Delete</button><br /></div>}
+                           
                             <hr />
                         </li>
                     ))}

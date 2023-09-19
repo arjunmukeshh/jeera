@@ -5,8 +5,8 @@ const Logout = () => {
     // Remove the JWT token from local storage
     localStorage.removeItem('jwtToken');
 
-    // Redirect the user to the login page (assuming it's available)
-    window.location.href = '/login'; // You can replace this with your route
+    // Redirect the user to the login page
+    window.location.href = '/login'; 
   };
 
   return (

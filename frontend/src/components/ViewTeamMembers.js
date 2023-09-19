@@ -1,6 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import AddMemberModal from './AddMemberPopup';
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import Header from './Header';
+
+
+const GradientContainer = styled('div')({
+    background: 'linear-gradient(45deg, #4B0082, #000000)',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
+
+const MemberDetails = styled('div')({
+    backgroundColor: '#fff',
+    padding: '10px',
+    borderRadius: '5px',
+    marginBottom: '10px',
+    width: '300px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+});
+
 const ViewTeamMembers = () => {
     const { teamId } = useParams(); // Accessing the 'teamId' parameter from the URL
     const [teamMembers, setTeamMembers] = useState([]);
@@ -56,26 +79,38 @@ const ViewTeamMembers = () => {
         setTeamMembers([...teamMembers, { username }]); // Update team members list
     };
 
+    const StyledButton = styled(Button)({
+        backgroundColor: '#000',
+        color: '#fff',
+        '&:hover': {
+            backgroundColor: '#333',
+        },
+    });
     return (
-        <div>
-            <h1>Team Members</h1>
-            <button onClick={openAddModal}>Add Team Member</button>
-            <ul>
-                {teamMembers.map((member) => (
-                    <li key={member.user_id}>
-                        <strong>Name:</strong> {member.full_name}<br />
-                        <strong>Email:</strong> {member.email_id}<br />
-                        <button onClick={() => handleDeleteUser(member.username)}>Delete</button><br />
-                    </li>
-                ))}
-            </ul>
-            <AddMemberModal
-                isOpen={isAddModalOpen}
-                onRequestClose={closeAddModal}
-                onAddMember={handleAddMember}
-                teamId={teamId}
-            />
-        </div>
+        <>
+            <Header />
+
+            <GradientContainer>
+                <h1>Members</h1>
+                <div>
+
+                    <StyledButton variant="contained" onClick={openAddModal}>Add Team Member</StyledButton>
+                    {teamMembers.map((member) => (
+                        <MemberDetails key={member.user_id}>
+                            <strong>Name:</strong> {member.full_name}<br />
+                            <strong>Email:</strong> {member.email_id}<br />
+                            <Button variant="contained" color="secondary" onClick={() => handleDeleteUser(member.username)}>Delete</Button><br />
+                        </MemberDetails>
+                    ))}
+                    <AddMemberModal
+                        isOpen={isAddModalOpen}
+                        onRequestClose={closeAddModal}
+                        onAddMember={handleAddMember}
+                        teamId={teamId}
+                    />
+                </div>
+            </GradientContainer>
+        </>
     );
 };
 

@@ -1,76 +1,94 @@
-import React, { useState, useEffect } from 'react';
-
-const EditTaskPopup = ({ onClose, onUpdateTask, taskToEdit }) => {
-  const [editedTask, setEditedTask] = useState(taskToEdit);
-
-  useEffect(() => {
-    setEditedTask(taskToEdit);
-  }, [taskToEdit]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedTask({
-      ...editedTask,
-      [name]: value,
+import React, { useState } from 'react';
+import Modal from 'react-modal';
+import '../css/AddProjectPopup.css'
+const EditTaskPopup = ({ isOpen, onClose, onUpdateTask, taskToEdit }) => {
+  const [name, setName] = useState(taskToEdit.name);
+  const [description, setDescription] = useState(taskToEdit.description);
+  const [status, setStatus] = useState(taskToEdit.status);
+  const [priority, setPriority] = useState(taskToEdit.priority);
+  
+  console.log("here")
+  const handleUpdateTask = () => {
+    onUpdateTask({
+      ...taskToEdit,
+      name,
+      description,
+      status,
+      priority,
     });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onUpdateTask(editedTask);
     onClose();
   };
 
   return (
-    <div className="popup">
-      <div className="popup-content">
-        <h2>Edit Task</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            value={editedTask.name}
-            onChange={handleInputChange}
-            placeholder="Name"
-            required
-          />
-          <br />
-          <input
-            type="text"
-            name="description"
-            value={editedTask.description}
-            onChange={handleInputChange}
-            placeholder="Description"
-            required
-          />
-          <br />
-          <select
-            name="status"
-            value={editedTask.status}
-            onChange={handleInputChange}
-            required
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      contentLabel="Edit Task"
+      className="modal"
+    >
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">Edit Task</p>
+        </header>
+        <section className="modal-card-body">
+          <div className="field">
+            <label className="label">Name</label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">Description</label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">Status</label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">Priority</label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+              />
+            </div>
+          </div>
+        </section>
+        <footer className="modal-card-foot">
+          <button
+            className="button is-success"
+            onClick={handleUpdateTask}
           >
-            <option value="to do">To Do</option>
-            <option value="in progress">In Progress</option>
-            <option value="done">Done</option>
-          </select>
-          <br />
-          <select
-            name="priority"
-            value={editedTask.priority}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-          <br />
-          <button type="submit">Save Changes</button><br />
-        </form>
-        <button onClick={onClose}>Close</button>
+            Save
+          </button>
+          <button className="button" onClick={onClose}>
+            Cancel
+          </button>
+        </footer>
       </div>
-    </div>
+    </Modal>
   );
 };
 
