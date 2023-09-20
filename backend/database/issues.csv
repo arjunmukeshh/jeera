@@ -1,0 +1,4 @@
+issue_type_id,summary,attachments,description,reports_to,assignee_id,priority,label,status
+1,Sample Summary 1,Attachment 1,Description 1,1,2,High,Label 1,open
+2,Sample Summary 2,Attachment 2,Description 2,3,4,Medium,Label 2,closed
+3,Sample Summary 3,Attachment 3,Description 3,5,6,Low,Label 3,in_progress
