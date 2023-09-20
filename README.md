@@ -1,3 +1,5 @@
+Jeera.
+
 Containerised task and access management application that uses JWT authorisation. The data is stored in a 3NF normalised MySQL database with input validation against SQL injection attacks. The application utilizes React, Fiber(Golang), MySQL and Docker. The user interface uses Material UI. It is reverse proxied using an Nginx server.
 
 feature/ui is the developed branch as of 19th august.
