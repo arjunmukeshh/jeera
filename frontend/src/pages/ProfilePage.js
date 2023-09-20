@@ -34,7 +34,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/users/${localStorage.getItem('username')}/details`, {
+                const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}/details`, {
                     headers: {
                         Authorization: localStorage.getItem('jwtToken'),
                     },
@@ -56,7 +56,7 @@ const Profile = () => {
 
     const handleDeleteAccount = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/users/${localStorage.getItem('username')}`, {
+            const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: localStorage.getItem('jwtToken'),
@@ -80,7 +80,7 @@ const Profile = () => {
 
     const handleDeactivateAccount = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/users/${localStorage.getItem('username')}`, {
+            const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json', // Specify JSON content type

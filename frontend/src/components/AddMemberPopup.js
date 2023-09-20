@@ -7,7 +7,7 @@ const AddMemberModal = ({ isOpen, onRequestClose, onAddMember, teamId }) => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://localhost:3000/teams/${teamId}/add_member`, {
+            const response = await fetch(`http://localhost:3001/teams/${teamId}/add_member`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

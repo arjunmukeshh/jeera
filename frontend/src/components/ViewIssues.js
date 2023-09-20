@@ -15,7 +15,7 @@ const ViewIssues = () => {
     useEffect(() => {
         const fetchIssues = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks/${taskId}/issues`, {
+                const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues`, {
                     headers: {
                         Authorization: localStorage.getItem('jwtToken'),
                     },
@@ -38,7 +38,7 @@ const ViewIssues = () => {
 
     const handleAddIssue = async (newIssue) => {
         try {
-            const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks/${taskId}/issues/add`, {
+            const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const ViewIssues = () => {
 
     const handleDeleteIssue = async (issueId) => {
         try {
-            const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks/${taskId}/issues/${issueId}`, {
+            const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues/${issueId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: localStorage.getItem('jwtToken'),
@@ -94,7 +94,7 @@ const ViewIssues = () => {
 
     const handleEditIssue = async (editedIssue) => {
         try {
-            const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks/${taskId}/issues/${editedIssue.issue_id}`, {
+            const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues/${editedIssue.issue_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ const ViewIssues = () => {
 
                 for (const issue of data) {
                     try {
-                        const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks/${taskId}/issues/add`, {
+                        const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues/add`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

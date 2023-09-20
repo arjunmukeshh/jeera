@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:3000/user/${formData.username}/login`, {
+      const response = await fetch(`http://localhost:3001/user/${formData.username}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

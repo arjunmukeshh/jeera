@@ -12,7 +12,7 @@ const ViewTeams = () => {
     useEffect(() => {
         const fetchTeams = async () => {
             try {
-                const response = await fetch('http://localhost:3000/teams');
+                const response = await fetch('http://localhost:3001/teams');
                 if (!response.ok) {
                     throw new Error('Error fetching teams');
                 }
@@ -39,7 +39,7 @@ const ViewTeams = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/teams', {
+            const response = await fetch('http://localhost:3001/teams', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const ViewTeams = () => {
 
     const handleDeleteTeam = async (teamId) => {
         try {
-            const response = await fetch(`http://localhost:3000/teams/${teamId}`, {
+            const response = await fetch(`http://localhost:3001/teams/${teamId}`, {
                 method: 'DELETE',
             });
 

@@ -1,94 +1,83 @@
 import React, { useState } from 'react';
-import Modal from 'react-modal';
-import '../css/AddProjectPopup.css'
-const EditTaskPopup = ({ isOpen, onClose, onUpdateTask, taskToEdit }) => {
-  const [name, setName] = useState(taskToEdit.name);
-  const [description, setDescription] = useState(taskToEdit.description);
-  const [status, setStatus] = useState(taskToEdit.status);
-  const [priority, setPriority] = useState(taskToEdit.priority);
-  
-  console.log("here")
-  const handleUpdateTask = () => {
-    onUpdateTask({
-      ...taskToEdit,
-      name,
-      description,
-      status,
-      priority,
-    });
+import "../css/AddProjectPopup.css";
+
+const EditTaskPopup = ({ onClose, onEditTask, editedTask }) => {
+  const [editedFields, setEditedFields] = useState({
+    name: editedTask.name,
+    description: editedTask.description,
+    status: editedTask.status,
+    priority: editedTask.priority,
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedFields(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onEditTask({ ...editedTask, ...editedFields });
     onClose();
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      contentLabel="Edit Task"
-      className="modal"
-    >
-      <div className="modal-card">
-        <header className="modal-card-head">
-          <p className="modal-card-title">Edit Task</p>
-        </header>
-        <section className="modal-card-body">
-          <div className="field">
-            <label className="label">Name</label>
-            <div className="control">
-              <input
-                className="input"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
+    <div className="overlay">
+      <div className="popup-inner">
+        <h2>Edit Task</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={editedFields.name}
+              onChange={handleChange}
+              required
+            />
           </div>
-          <div className="field">
-            <label className="label">Description</label>
-            <div className="control">
-              <input
-                className="input"
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              value={editedFields.description}
+              onChange={handleChange}
+              required
+            />
           </div>
-          <div className="field">
-            <label className="label">Status</label>
-            <div className="control">
-              <input
-                className="input"
-                type="text"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="status">Status</label>
+            <select
+              id="status"
+              name="status"
+              value={editedFields.status}
+              onChange={handleChange}
+              required
+            >
+              <option value="to do">To Do</option>
+              <option value="in progress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
           </div>
-          <div className="field">
-            <label className="label">Priority</label>
-            <div className="control">
-              <input
-                className="input"
-                type="text"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="priority">Priority</label>
+            <select
+              id="priority"
+              name="priority"
+              value={editedFields.priority}
+              onChange={handleChange}
+              required
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
           </div>
-        </section>
-        <footer className="modal-card-foot">
-          <button
-            className="button is-success"
-            onClick={handleUpdateTask}
-          >
-            Save
-          </button>
-          <button className="button" onClick={onClose}>
-            Cancel
-          </button>
-        </footer>
+          <button type="submit">Save Changes</button>
+        </form>
       </div>
-    </Modal>
+    </div>
   );
 };
 

@@ -30,7 +30,7 @@ const Projects = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/user/${localStorage.getItem('username')}/projects`, {
+                const response = await fetch(`http://localhost:3001/user/${localStorage.getItem('username')}/projects`, {
                     headers: {
                         Authorization: localStorage.getItem('jwtToken'),
                     },
@@ -67,7 +67,7 @@ const Projects = () => {
         const fetchProjectTeams = async () => {
             try {
                 for (const project of projects) {
-                    const response = await fetch(`http://localhost:3000/projects/${project.project_id}/teams`, {
+                    const response = await fetch(`http://localhost:3001/projects/${project.project_id}/teams`, {
                         headers: {
                             Authorization: localStorage.getItem('jwtToken'),
                         },
@@ -78,7 +78,7 @@ const Projects = () => {
                     }
 
                     const data = await response.json();
-
+                    console.log(project.project_id);
                     setProjectTeams(prevState => ({
                         ...prevState,
                         [project.project_id]: data,
@@ -96,7 +96,7 @@ const Projects = () => {
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/users/${localStorage.getItem('username')}/details`, {
+                const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}/details`, {
                     headers: {
                         Authorization: localStorage.getItem('jwtToken'),
                     },
@@ -122,7 +122,7 @@ const Projects = () => {
 
     const handleAddProject = async (newProject) => {
         try {
-            const response = await fetch('http://localhost:3000/projects/add', {
+            const response = await fetch('http://localhost:3001/projects/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ const Projects = () => {
 
     const handleRemoveProject = async (projectId) => {
         try {
-            const response = await fetch(`http://localhost:3000/projects/delete/${projectId}`, {
+            const response = await fetch(`http://localhost:3001/projects/delete/${projectId}`, {
                 method: 'GET',
                 headers: {
                     Authorization: localStorage.getItem('jwtToken'),
@@ -165,7 +165,7 @@ const Projects = () => {
 
     const handleUpdateProject = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/projects/update/${selectedProject.project_id}`, {
+            const response = await fetch(`http://localhost:3001/projects/update/${selectedProject.project_id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ const Projects = () => {
 
     const handleDeleteTeam = async (projectId, teamName) => {
         try {
-            const response = await fetch(`http://localhost:3000/projects/${projectId}/${teamName}`, {
+            const response = await fetch(`http://localhost:3001/projects/${projectId}/${teamName}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: localStorage.getItem('jwtToken'),
@@ -212,7 +212,7 @@ const Projects = () => {
             }
 
             // Update project teams after deleting the team
-            window.location.reload();
+            
         } catch (error) {
             console.error('Error deleting team:', error);
         }
@@ -232,7 +232,7 @@ const Projects = () => {
 
     const handleAddTeam = async (projectId, newTeam) => {
         try {
-            const response = await fetch(`http://localhost:3000/projects/${projectId}/teams`, {
+            const response = await fetch(`http://localhost:3001/projects/${projectId}/teams`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -270,7 +270,7 @@ const Projects = () => {
             {isAdmin && <h2><Link to="/users">Users</Link></h2>}
             {isAdmin && <h2><Link to="/teams">Edit Teams</Link></h2>}
             {isAdmin && <h2><Link to="/register">Register User(s)</Link></h2>}
-            <button variant="contained" onClick={() => setIsPopupOpen(true)}>Add Project</button>
+            <button className='AddProject' onClick={() => setIsPopupOpen(true)}>Add Project</button>
             <Grid container spacing={2}>
                 {projects.map((project) => (
                     <Grid item xs={12} key={project.project_id}>

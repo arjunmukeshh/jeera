@@ -30,5 +30,5 @@ func main() {
 
 	routes.SetupProtectedRoutes(app)
 
-	app.Listen(":3000")
+	app.Listen(":3001")
 }

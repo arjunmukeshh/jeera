@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/users/${localStorage.getItem('username')}/details`, {
+        const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}/details`, {
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
           },

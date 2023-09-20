@@ -23,6 +23,19 @@ type DummyIssue struct {
 	Status      string `gorm:"default:'open'" json:"status"`
 }
 
+type DummyIssueEdit struct {
+	IssueID     uint   `gorm:"primaryKey" json:"issue_id"`
+	IssueTypeID uint `json:"issue_type_id"`
+	TaskID      uint `json:"task_id"`
+	Summary     string `gorm:"not null" json:"summary"`
+	Attachments string `json:"attachments"`
+	Description string `json:"description"`
+	ReportsTo   uint `json:"reports_to"`
+	AssigneeID  uint `json:"assignee_id"`
+	Priority    string `json:"priority"`
+	Label       string `json:"label"`
+	Status      string `gorm:"default:'open'" json:"status"`
+}
 // AddIssue adds a new issue to a specific task in a project
 func AddIssue(c *fiber.Ctx) error {
 	var issue models.Issue
@@ -128,7 +141,7 @@ func UpdateIssue(c *fiber.Ctx) error {
 	// Get the project ID from the request parameters
 	issue_id := c.Params("issue_id")
 	var issue models.Issue
-	var dummyIssue DummyIssue
+	var dummyIssue DummyIssueEdit
 	// Parse the request body to get issue details
 	if err := c.BodyParser(&dummyIssue); err != nil {
 		return err
@@ -141,27 +154,11 @@ func UpdateIssue(c *fiber.Ctx) error {
 	issue.Priority = dummyIssue.Priority
 	issue.Label = dummyIssue.Label
 	issue.Status = dummyIssue.Status
-
-	IssueTypeID, err := strconv.ParseUint(dummyIssue.IssueTypeID, 10, 64)
-	if err != nil {
-		return err
-	}
-	issue.IssueTypeID = uint(IssueTypeID)
-
-	reports_to, err := strconv.ParseUint(dummyIssue.ReportsTo, 10, 64)
-	if err != nil {
-		return err
-	}
-	issue.ReportsTo = uint(reports_to)
-
-	assignee_id, err := strconv.ParseUint(dummyIssue.AssigneeID, 10, 64)
-	if err != nil {
-		return err
-	}
-	issue.AssigneeID = uint(assignee_id)
-
-	dummyIssue.TaskID = c.Params("task_id")
-	taskID, err := strconv.ParseUint(dummyIssue.TaskID, 10, 64)
+	issue.IssueTypeID = dummyIssue.IssueTypeID
+	issue.ReportsTo = dummyIssue.ReportsTo
+	issue.AssigneeID = dummyIssue.AssigneeID
+	TaskIDString:= c.Params("task_id")
+	taskID, err := strconv.ParseUint(TaskIDString, 10, 64)
 	if err != nil {
 		return err
 	}

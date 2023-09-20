@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import "../css/AddProjectPopup.css";
 const AddTaskPopup = ({ onClose, onAddTask }) => {
   const [newTask, setNewTask] = useState({
     name: '',
@@ -23,8 +23,8 @@ const AddTaskPopup = ({ onClose, onAddTask }) => {
   };
 
   return (
-    <div className="popup">
-      <div className="popup-content">
+    <div className="overlay">
+      <div className="popup-inner">
         <h2>Add New Task</h2>
         <form onSubmit={handleSubmit}>
           <input

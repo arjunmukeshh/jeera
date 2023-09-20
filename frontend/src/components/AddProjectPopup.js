@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import "../css/AddProjectPopup.css";
 const AddProjectPopup = ({ onClose, onAddProject, projectToUpdate, onUpdateProject }) => {
   const [newProject, setNewProject] = useState({
     name: '',
@@ -34,8 +34,8 @@ const AddProjectPopup = ({ onClose, onAddProject, projectToUpdate, onUpdateProje
   };
 
   return (
-    <div className="popup">
-      <div className="popup-content">
+    <div className="overlay">
+      <div className="popup-inner">
         <h2>Add/Edit Project</h2>
         <form onSubmit={handleSubmit}>
           <input

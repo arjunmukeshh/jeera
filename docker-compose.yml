@@ -33,7 +33,7 @@ services:
       context: backend
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 3001:3001
     depends_on:
       db:
         condition: service_healthy
@@ -46,7 +46,7 @@ services:
   #     context: frontend
   #     dockerfile: Dockerfile
   #   ports:
-  #     - 3006:3006
+  #     - 3000:3000
   #   depends_on:
   #     - backend
    

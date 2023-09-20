@@ -31,7 +31,7 @@ const ViewTeamMembers = () => {
     useEffect(() => {
         const fetchTeamMembers = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/teams/${teamId}/members`);
+                const response = await fetch(`http://localhost:3001/teams/${teamId}/members`);
                 if (!response.ok) {
                     throw new Error('Error fetching team members');
                 }
@@ -47,7 +47,7 @@ const ViewTeamMembers = () => {
 
     const handleDeleteUser = async (username) => {
         try {
-            const response = await fetch(`http://localhost:3000/teams/${teamId}/remove_member`, {
+            const response = await fetch(`http://localhost:3001/teams/${teamId}/remove_member`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

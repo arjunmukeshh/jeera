@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Logout from './Logout';
 import AddTaskPopup from './AddTaskPopup';
-import EditTaskPopup from './EditTaskPopup';
 import ConfirmPopup from './ConfirmPopup';
+import EditTaskPopup from './EditTaskPopup';
 import Papa from 'papaparse';
 import { Link } from 'react-router-dom';
 import {
@@ -34,16 +34,29 @@ const ViewTasks = () => {
   const { projectId } = useParams();
   const [tasks, setTasks] = useState([]);
   const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
-  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
   const isAdmin = localStorage.getItem('isAdmin')
   const user_id = localStorage.getItem('user_id')
   var maintainer_id;
+
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [editedTask, setEditedTask] = useState(null);
+
+  const openEditPopup = (task) => {
+    setEditedTask(task); // Set task to edit
+    setIsEditPopupOpen(true); // Open the edit popup
+  };
+
+  const closeEditPopup = () => {
+    setEditedTask(null); // Clear task being edited
+    setIsEditPopupOpen(false); // Close the edit popup
+  };
+
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks`, {
+        const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks`, {
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
           },
@@ -57,7 +70,7 @@ const ViewTasks = () => {
         maintainer_id = localStorage.getItem(`project_${projectId}_maintainer`)
         setTasks(data.data);
 
-        const projectTeamsResponse = await fetch(`http://localhost:3000/projects/${user_id}/${projectId}`, {
+        const projectTeamsResponse = await fetch(`http://localhost:3001/projects/${user_id}/${projectId}`, {
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
           },
@@ -82,7 +95,7 @@ const ViewTasks = () => {
 
   const handleAddTask = async (newTask) => {
     try {
-      const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks`, {
+      const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,46 +110,13 @@ const ViewTasks = () => {
 
       const addedTask = await response.json();
       setTasks([...tasks, addedTask]);
+      window.location.reload();
     } catch (error) {
       console.error('Error adding task:', error);
     }
   };
 
-  const handleEditTask = async (editedTask) => {
-    try {
-      const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks/${editedTask.task_id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: localStorage.getItem('jwtToken'),
-        },
-        body: JSON.stringify(editedTask),
-      });
 
-      if (!response.ok) {
-        throw new Error('Error editing task');
-      }
-
-      const updatedTasks = tasks.map(task =>
-        task.task_id === editedTask.task_id ? editedTask : task
-      );
-      setTasks(updatedTasks);
-      setSelectedTask(null);
-      setIsEditPopupOpen(false);
-    } catch (error) {
-      console.error('Error editing task:', error);
-    }
-  };
-
-  const openEditPopup = (task) => {
-    setSelectedTask({ ...task }); // Copy selected task for editing
-    setIsEditPopupOpen(true); // Open the edit popup
-  };
-
-  const closeEditPopup = () => {
-    setSelectedTask(null); // Clear selected task
-    setIsEditPopupOpen(false); // Close the edit popup
-  };
 
 
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
@@ -155,7 +135,7 @@ const ViewTasks = () => {
   const handleDeleteTask = async () => {
     if (taskToDelete) {
       try {
-        const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks/${taskToDelete.task_id}`, {
+        const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskToDelete.task_id}`, {
           method: 'DELETE',
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
@@ -259,7 +239,7 @@ const ViewTasks = () => {
         const tasksToAdd = results.data;
         for (const task of tasksToAdd) {
           try {
-            const response = await fetch(`http://localhost:3000/projects/${projectId}/tasks`, {
+            const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -280,6 +260,30 @@ const ViewTasks = () => {
         }
       },
     });
+  };
+
+  const handleEditTask = async (editedTask) => {
+    try {
+      const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${editedTask.task_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('jwtToken'),
+        },
+        body: JSON.stringify(editedTask),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error editing task');
+      }
+
+      const updatedTask = await response.json();
+      // Update the task in the tasks state
+      setTasks(tasks.map(task => (task.task_id === updatedTask.task_id ? updatedTask : task)));
+      closeEditPopup(); // Close the edit popup after successful edit
+    } catch (error) {
+      console.error('Error editing task:', error);
+    }
   };
 
   localStorage.setItem('maintainer_id', projectId.maintaine)
@@ -331,14 +335,19 @@ const ViewTasks = () => {
                 </TaskCardContent>
                 <CardActions>
                   {(isAdmin || maintainer_id == user_id || localStorage.getItem("writeTasks") == "1") && (
-                    <Button variant="contained" onClick={() => openEditPopup(task)}>
-                      Edit
-                    </Button>
-                  )}
+                    <React.Fragment>
+                      <Button variant="contained" onClick={() => openEditPopup(task)}>
+                        Edit
+                      </Button>
+                    </React.Fragment>)}
+
                   {(isAdmin || maintainer_id == user_id) && (
-                    <Button variant="contained" onClick={() => openDeletePopup(task)}>
-                      Delete
-                    </Button>
+                    <React.Fragment>
+                      <Button variant="contained" onClick={() => openDeletePopup(task)}>
+                        Delete
+                      </Button>
+
+                    </React.Fragment>
                   )}
                 </CardActions>
               </TaskCard>
@@ -356,13 +365,11 @@ const ViewTasks = () => {
 
       {isEditPopupOpen && (
         <EditTaskPopup
-          isOpen={isEditPopupOpen}
           onClose={closeEditPopup}
-          onUpdateTask={handleEditTask}
-          taskToEdit={selectedTask}
+          onEditTask={handleEditTask}
+          editedTask={editedTask}
         />
       )}
-
 
       {isDeletePopupOpen && (
         <ConfirmPopup

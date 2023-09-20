@@ -20,7 +20,6 @@ func InitDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	AutoMigrateAllModels(db)
 
 	DB = db
 

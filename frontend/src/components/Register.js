@@ -34,7 +34,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/user/register', {
+      const response = await fetch('http://localhost:3001/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const Register = () => {
       complete: function (results) {
         results.data.forEach(async (user) => {
           try {
-            const response = await fetch('http://localhost:3000/user/register', {
+            const response = await fetch('http://localhost:3001/user/register', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'

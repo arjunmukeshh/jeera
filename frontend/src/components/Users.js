@@ -7,7 +7,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:3000/users', {
+        const response = await fetch('http://localhost:3001/users', {
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
           },
@@ -29,7 +29,7 @@ const Users = () => {
 
   const handleDeleteUser = async (username) => {
     try {
-      const response = await fetch(`http://localhost:3000/users/${username}`, {
+      const response = await fetch(`http://localhost:3001/users/${username}`, {
         method: 'DELETE',
         headers: {
           Authorization: localStorage.getItem('jwtToken'),
@@ -49,7 +49,7 @@ const Users = () => {
 
   const handleToggleUserStatus = async (username, active) => {
     try {
-      const response = await fetch(`http://localhost:3000/users/${username}`, {
+      const response = await fetch(`http://localhost:3001/users/${username}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
