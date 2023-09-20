@@ -37,8 +37,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-   
-
   # frontend:
   #   image: frontend
   #   container_name: frontend
@@ -49,7 +47,7 @@ services:
   #     - 3000:3000
   #   depends_on:
   #     - backend
-   
+
   # nginx:
   #   image: nginx
   #   container_name: nginx

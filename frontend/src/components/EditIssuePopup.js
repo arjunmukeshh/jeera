@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "../css/AddProjectPopup.css";
 
 const EditIssuePopup = ({ onClose, onUpdateIssue, issueToEdit }) => {
     const [editedIssue, setEditedIssue] = useState({ ...issueToEdit });
@@ -18,8 +19,8 @@ const EditIssuePopup = ({ onClose, onUpdateIssue, issueToEdit }) => {
     };
 
     return (
-        <div className="popup">
-            <div className="popup-content">
+        <div className="overlay">
+            <div className="popup-inner">
                 <h2>Edit Issue</h2>
                 <form onSubmit={handleSubmit}>
                     {/* Issue Type ID */}

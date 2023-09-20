@@ -4,6 +4,7 @@ import Logout from './Logout';
 import AddIssuePopup from './AddIssuePopup';
 import EditIssuePopup from './EditIssuePopup';
 import Papa from 'papaparse'
+import Header from './Header';
 
 const ViewIssues = () => {
     const { projectId, taskId } = useParams();
@@ -185,6 +186,7 @@ const ViewIssues = () => {
     const groupedIssues = getGroupedIssues();
     return (
         <div>
+            <Header />
             <h1>Issues for Task {taskId}</h1>
             {(isAdmin || user_id == maintainer_id) && <div><button onClick={() => setIsAddPopupOpen(true)}>Add Issue</button>
                 <input
