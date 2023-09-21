@@ -1,0 +1,50 @@
+.gradientBackground {
+    background: linear-gradient(45deg,rgb(255, 47, 0), black); /* Changed gradient colors */
+    min-height: 100vh;
+  }
+  
+  .container {
+    text-align: center;
+    color: #fff;
+    margin-top: 10%;
+  }
+  
+  .content {
+    margin-bottom: 3rem;
+  }
+  
+  .title {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #fff; /* Changed text color to white */
+  }
+  
+  .description {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #fff; /* Changed text color to white */
+  }
+  
+  .button {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    margin: 1rem;
+    background-color: #f06; /* Changed button background color to orange */
+    color: #fff; /* Changed button text color to white */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #d9534f; /* Darker orange on hover */
+  }
+  
+  .logo {
+    flex-grow: 1;
+    font-weight: bold;
+    font-size: 2rem;
+    color: #fff; /* Changed text color to white */
+  }
+  

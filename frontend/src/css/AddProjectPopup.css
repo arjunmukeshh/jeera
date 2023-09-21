@@ -1,0 +1,185 @@
+/* AddProjectPopup.css */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-inner {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.popup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .popup-content h2 {
+    margin-bottom: 10px;
+  }
+  
+  .popup-content input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .popup-content button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .popup-content button:last-child {
+    margin-right: 0;
+  }
+  
+  .popup-content button:hover {
+    background-color: #0056b3;
+  }
+/* Modal Container */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal.is-active {
+  display: block;
+}
+
+/* Modal Content */
+.modal-card {
+  background-color: #fff;
+  margin: 10% auto;
+  max-width: 600px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Header */
+.modal-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.modal-card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.delete {
+  cursor: pointer;
+}
+
+/* Modal Body */
+.modal-card-body {
+  padding: 20px;
+}
+
+/* Form Fields */
+.field {
+  margin-bottom: 10px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.control input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Modal Footer */
+.modal-card-foot {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ccc;
+}
+
+.button {
+  margin-left: 10px;
+  background-color: grey;
+}
+
+.is-success {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+}
+
+.is-success:hover {
+  background-color: #218838;
+}
+
+/* Close Button */
+.delete {
+  font-size: 1.5rem;
+  color: #000;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.AddProject {
+  background-color: #4CAF50; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.inline{
+  display: inline;
+}
+
+.right{
+  margin-top: 0;
+  
+}
