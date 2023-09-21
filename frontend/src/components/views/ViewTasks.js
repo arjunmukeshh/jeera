@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Logout from './Logout';
-import AddTaskPopup from './AddTaskPopup';
-import ConfirmPopup from './ConfirmPopup';
-import EditTaskPopup from './EditTaskPopup';
+import Logout from '../Logout';
+import AddTaskPopup from '../popups/AddTaskPopup';
+import ConfirmPopup from '../popups/ConfirmPopup';
+import EditTaskPopup from '../popups/EditTaskPopup';
 import Papa from 'papaparse';
 import { Link } from 'react-router-dom';
 import {
@@ -15,7 +15,8 @@ import {
   Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Header from './Header';
+import Header from '../Header';
+import API_BASE_URL from '../../config/config';
 
 const TaskCard = styled(Card)(({ taskStatus }) => ({
   backgroundColor: taskStatus === 'to do' ? '#FF0000' : // red for to do
@@ -56,7 +57,7 @@ const ViewTasks = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks`, {
+        const response = await fetch(`${API_BASE_URL}/projects/${projectId}/${user_id}/tasks`, {
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
           },
@@ -68,9 +69,28 @@ const ViewTasks = () => {
 
         const data = await response.json();
         maintainer_id = localStorage.getItem(`project_${projectId}_maintainer`)
-        setTasks(data.data);
+        setTasks(data.tasksjson.data);
+        // Set writeTasks and writeIssues in local storage
+        console.log(data.writejson.data)
+        let writeTasksFlag = 0;
+        let writeIssuesFlag = 0;
 
-        const projectTeamsResponse = await fetch(`http://localhost:3001/projects/${user_id}/${projectId}`, {
+        // Iterate through the array
+        data.writejson.data.forEach(item => {
+          if (item.WriteTasks === "1") {
+            writeTasksFlag = 1;
+          }
+          if (item.WriteIssues === "1") {
+            writeIssuesFlag = 1;
+          }
+        });
+        console.log(writeTasksFlag);
+        // Set flags in local storage
+        localStorage.setItem('writeTasks', writeTasksFlag);
+        localStorage.setItem('writeIssues', writeIssuesFlag);
+        
+        console.log(localStorage.getItem(`writeTasks`))
+        const projectTeamsResponse = await fetch(`${API_BASE_URL}/projects/${user_id}/${projectId}`, {
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
           },
@@ -82,9 +102,7 @@ const ViewTasks = () => {
 
         const projectTeamsData = await projectTeamsResponse.json();
 
-        // Set writeTasks and writeIssues in local storage
-        localStorage.setItem(`writeTasks`, projectTeamsData.writeTasks);
-        localStorage.setItem(`writeIssues`, projectTeamsData.writeIssues);
+
       } catch (error) {
         console.error('Error fetching tasks:', error);
       }
@@ -95,7 +113,7 @@ const ViewTasks = () => {
 
   const handleAddTask = async (newTask) => {
     try {
-      const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks`, {
+      const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -135,7 +153,7 @@ const ViewTasks = () => {
   const handleDeleteTask = async () => {
     if (taskToDelete) {
       try {
-        const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskToDelete.task_id}`, {
+        const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks/${taskToDelete.task_id}`, {
           method: 'DELETE',
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
@@ -239,7 +257,7 @@ const ViewTasks = () => {
         const tasksToAdd = results.data;
         for (const task of tasksToAdd) {
           try {
-            const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks`, {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -264,7 +282,7 @@ const ViewTasks = () => {
 
   const handleEditTask = async (editedTask) => {
     try {
-      const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${editedTask.task_id}`, {
+      const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks/${editedTask.task_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

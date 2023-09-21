@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Logout from './Logout';
-import AddProjectPopup from './AddProjectPopup';
-import AddTeamModal from './AddTeamToProjectModal';
+import Logout from '../Logout';
+import AddProjectPopup from '../popups/AddProjectPopup';
+import AddTeamModal from '../popups/AddTeamToProjectPopup';
 import { Link } from 'react-router-dom';
 import {
     Button,
@@ -11,8 +11,8 @@ import {
     Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Header from './Header';
-
+import Header from '../Header';
+import API_BASE_URL from '../../config/config';
 const ProjectCard = styled(Card)({
     marginBottom: '20px',
 });
@@ -30,7 +30,7 @@ const Projects = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/user/${localStorage.getItem('username')}/projects`, {
+                const response = await fetch(`${API_BASE_URL}/user/${localStorage.getItem('username')}/projects`, {
                     headers: {
                         Authorization: localStorage.getItem('jwtToken'),
                     },
@@ -67,7 +67,7 @@ const Projects = () => {
         const fetchProjectTeams = async () => {
             try {
                 for (const project of projects) {
-                    const response = await fetch(`http://localhost:3001/projects/${project.project_id}/teams`, {
+                    const response = await fetch(`${API_BASE_URL}/projects/${project.project_id}/teams`, {
                         headers: {
                             Authorization: localStorage.getItem('jwtToken'),
                         },
@@ -78,7 +78,7 @@ const Projects = () => {
                     }
 
                     const data = await response.json();
-                    console.log(project.project_id);
+                    console.log(data);
                     setProjectTeams(prevState => ({
                         ...prevState,
                         [project.project_id]: data,
@@ -96,7 +96,7 @@ const Projects = () => {
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}/details`, {
+                const response = await fetch(`${API_BASE_URL}/users/${localStorage.getItem('username')}/details`, {
                     headers: {
                         Authorization: localStorage.getItem('jwtToken'),
                     },
@@ -122,7 +122,7 @@ const Projects = () => {
 
     const handleAddProject = async (newProject) => {
         try {
-            const response = await fetch('http://localhost:3001/projects/add', {
+            const response = await fetch('${API_BASE_URL}/projects/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ const Projects = () => {
 
     const handleRemoveProject = async (projectId) => {
         try {
-            const response = await fetch(`http://localhost:3001/projects/delete/${projectId}`, {
+            const response = await fetch(`${API_BASE_URL}/projects/delete/${projectId}`, {
                 method: 'GET',
                 headers: {
                     Authorization: localStorage.getItem('jwtToken'),
@@ -165,7 +165,7 @@ const Projects = () => {
 
     const handleUpdateProject = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/projects/update/${selectedProject.project_id}`, {
+            const response = await fetch(`${API_BASE_URL}/projects/update/${selectedProject.project_id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ const Projects = () => {
 
     const handleDeleteTeam = async (projectId, teamName) => {
         try {
-            const response = await fetch(`http://localhost:3001/projects/${projectId}/${teamName}`, {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}/${teamName}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: localStorage.getItem('jwtToken'),
@@ -232,7 +232,7 @@ const Projects = () => {
 
     const handleAddTeam = async (projectId, newTeam) => {
         try {
-            const response = await fetch(`http://localhost:3001/projects/${projectId}/teams`, {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}/teams`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

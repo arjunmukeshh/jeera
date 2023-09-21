@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import Header from './Header';
+import API_BASE_URL from '../config/config';
 const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -22,7 +23,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:3001/user/${formData.username}/login`, {
+      const response = await fetch(`${API_BASE_URL}/user/${formData.username}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

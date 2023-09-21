@@ -9,9 +9,7 @@ import (
 
 func SetupTaskRoutes(app *fiber.App) {
 	app.Post("/projects/:project_id/tasks", controllers.AddTask)
-
-	app.Get("/projects/:project_id/tasks", controllers.ViewTasks)
-
+	app.Get("/projects/:project_id/:user_id/tasks", controllers.ViewTasks)
 	app.Get("/projects/:project_id/tasks/:task_id", controllers.ViewTask)
 
 	app.Put("/projects/:project_id/tasks/:task_id", controllers.UpdateTask)

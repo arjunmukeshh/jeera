@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import Header from './Header';
 import Papa from 'papaparse';
-
+import API_BASE_URL from '../config/config';
 const Register = () => {
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/user/register', {
+      const response = await fetch(`${API_BASE_URL}/user/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const Register = () => {
       complete: function (results) {
         results.data.forEach(async (user) => {
           try {
-            const response = await fetch('http://localhost:3001/user/register', {
+            const response = await fetch(`${API_BASE_URL}/user/register`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'

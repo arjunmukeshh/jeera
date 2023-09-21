@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
-import Header from './Header'
+import Header from '../Header';
+import API_BASE_URL from '../../config/config';
+
 const Users = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:3001/users', {
+        const response = await fetch(`${API_BASE_URL}/users`, {
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
           },
@@ -29,7 +31,7 @@ const Users = () => {
 
   const handleDeleteUser = async (username) => {
     try {
-      const response = await fetch(`http://localhost:3001/users/${username}`, {
+      const response = await fetch(`${API_BASE_URL}/users/${username}`, {
         method: 'DELETE',
         headers: {
           Authorization: localStorage.getItem('jwtToken'),
@@ -49,13 +51,13 @@ const Users = () => {
 
   const handleToggleUserStatus = async (username, active) => {
     try {
-      const response = await fetch(`http://localhost:3001/users/${username}`, {
+      const response = await fetch(`${API_BASE_URL}/users/${username}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.getItem('jwtToken'),
         },
-        body: JSON.stringify({ active: active === 1 ? "0" : "1" }),
+        body: JSON.stringify({ active: active == 1 ? "0" : "1" }),
       });
 
       if (!response.ok) {
@@ -63,10 +65,9 @@ const Users = () => {
       }
 
       const updatedUsers = users.map(user =>
-        user.username === username ? { ...user, active: active === 1 ? 0 : 1 } : user
+        user.username === username ? { ...user, active: active == 1 ? 0 : 1 } : user
       );
       setUsers(updatedUsers);
-      window.location.reload();
     } catch (error) {
       console.error('Error toggling user status:', error);
     }
@@ -103,14 +104,14 @@ const Users = () => {
                     Delete
                   </Button>
                 </TableCell>
-                <TableCell>{user.active === 1 ? 'Activated' : 'Deactivated'}</TableCell>
+                <TableCell>{user.active == 1 ? 'Activated' : 'Deactivated'}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
                     color="warning"
                     onClick={() => handleToggleUserStatus(user.username, user.active)}
                   >
-                    {user.active === 1 ? 'Disable' : 'Enable'}
+                    {user.active == 1 ? 'Disable' : 'Enable'}
                   </Button>
                 </TableCell>
               </TableRow>

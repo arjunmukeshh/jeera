@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import AddMemberModal from './AddMemberPopup';
+import AddMemberModal from '../popups/AddMemberPopup';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Header from './Header';
-
+import Header from '../Header';
+import API_BASE_URL from '../../config/config';
 
 const GradientContainer = styled('div')({
     background: 'linear-gradient(45deg, #4B0082, #000000)',
@@ -31,7 +31,7 @@ const ViewTeamMembers = () => {
     useEffect(() => {
         const fetchTeamMembers = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/teams/${teamId}/members`);
+                const response = await fetch(`${API_BASE_URL}/teams/${teamId}/members`);
                 if (!response.ok) {
                     throw new Error('Error fetching team members');
                 }
@@ -47,7 +47,7 @@ const ViewTeamMembers = () => {
 
     const handleDeleteUser = async (username) => {
         try {
-            const response = await fetch(`http://localhost:3001/teams/${teamId}/remove_member`, {
+            const response = await fetch(`${API_BASE_URL}/teams/${teamId}/remove_member`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

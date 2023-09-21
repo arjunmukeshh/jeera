@@ -3,6 +3,8 @@ import Header from '../components/Header';
 import { Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../config/config';
+
 const GradientContainer = styled('div')({
     background: 'linear-gradient(45deg, #FF4500, #000000)',
     minHeight: '100vh',
@@ -34,7 +36,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}/details`, {
+                const response = await fetch(`${API_BASE_URL}/users/${localStorage.getItem('username')}/details`, {
                     headers: {
                         Authorization: localStorage.getItem('jwtToken'),
                     },
@@ -56,7 +58,7 @@ const Profile = () => {
 
     const handleDeleteAccount = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}`, {
+            const response = await fetch(`${API_BASE_URL}/users/${localStorage.getItem('username')}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: localStorage.getItem('jwtToken'),
@@ -80,7 +82,7 @@ const Profile = () => {
 
     const handleDeactivateAccount = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}`, {
+            const response = await fetch(`${API_BASE_URL}/users/${localStorage.getItem('username')}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json', // Specify JSON content type

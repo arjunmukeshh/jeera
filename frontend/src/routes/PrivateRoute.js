@@ -5,7 +5,7 @@ const PrivateRoute = ({ element: Component, authorized, ...rest }) => {
   return (
     <Route
       {...rest}
-      element={authorized ? <Component /> : <Navigate to="/login" />}
+      element={authorized ? <Component /> : <Navigate to="/error" />}
     />
   );
 };

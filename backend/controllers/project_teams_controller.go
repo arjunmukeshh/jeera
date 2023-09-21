@@ -20,7 +20,6 @@ func GetTeamsByProjectID(c *fiber.Ctx) error {
 
 	var teams []models.Team
 
-	// Assuming you have a model called `Projects_Teams` with foreign keys `project_id` and `teamname`
 	config.DB.Table("Teams").Joins("JOIN Projects_Teams ON Teams.name = Projects_Teams.teamname").
 		Where("Projects_Teams.project_id = ?", projectID).Find(&teams)
 
@@ -106,3 +105,4 @@ func GetProjectTeamsByUserIDAndProjectID(c *fiber.Ctx) error {
 
 	return c.JSON(&projectTeams)
 }
+

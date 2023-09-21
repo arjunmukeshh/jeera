@@ -43,18 +43,29 @@ func AddTask(c *fiber.Ctx) error {
 	})
 }
 
+
+
 func ViewTasks(c *fiber.Ctx) error {
 	// Get the project ID from the request parameters
 	projectID := c.Params("project_id")
-
+	userID := c.Params("user_id")
 	var tasks []models.Task
-
+	var wt[] models.ProjectsTeams
 	// Retrieve all tasks associated with the project
 	config.DB.Table("Tasks").Where("project_id = ?", projectID).Find(&tasks)
-
+	
+	config.DB.Raw(`select * from Projects_Teams where project_id=? and teamname IN(select name from teams where team_id IN(select team_id from team_members where user_id=?))`, projectID, userID).Scan(&wt)
+	
 	return c.Status(200).JSON(fiber.Map{
-		"success": true,
-		"data":    tasks,
+		"tasksjson": map[string]interface{}{
+			"success": true,
+			"data":    tasks,
+		},
+		"writejson":map[string]interface{}{
+			"success":true,
+			"data" : wt,
+		},
+
 	})
 }
 

@@ -20,23 +20,23 @@ services:
       timeout: 20s
       retries: 10
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
 
-  backend:
-    image: backend
-    container_name: backend
-    build:
-      context: backend
-      dockerfile: Dockerfile
-    ports:
-      - 3001:3001
-    depends_on:
-      db:
-        condition: service_healthy
+  # backend:
+  #   image: backend
+  #   container_name: backend
+  #   build:
+  #     context: backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3001:3001
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
   # frontend:
   #   image: frontend
   #   container_name: frontend

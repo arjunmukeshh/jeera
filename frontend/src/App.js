@@ -2,13 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
-import Projects from './components/Projects';
+import Projects from './components/views/Projects';
 import ErrorPage from './pages/ErrorPage';
-import ViewTasks from './components/ViewTasks';
-import ViewIssues from './components/ViewIssues';
-import Teams from './components/Teams';
-import ViewTeamMembers from './components/ViewTeamMembers';
-import Users from './components/Users';
+import ViewTasks from './components/views/ViewTasks';
+import ViewIssues from './components/views/ViewIssues';
+import Teams from './components/views/Teams';
+import ViewTeamMembers from './components/views/ViewTeamMembers';
+import Users from './components/views/Users';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
@@ -29,27 +29,29 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<HomePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/error" element={<ErrorPage />} />
+        <Route path="/dashboard" element={<PrivateRoute><HomePage /></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+
+        <Route path="/register" element={<PrivateRoute><Register /></PrivateRoute>} />
+
         <Route path="/projects/:projectId/tasks" element={<PrivateRoute><ViewTasks /></PrivateRoute>} />
         <Route
           path="/projects"
           element={
-            // <PrivateRoute>
+            <PrivateRoute>
               <Projects />
-            // </PrivateRoute>
+            </PrivateRoute>
           }
         />
-        <Route path="/users" element={<Users />} ></Route>
+        <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} ></Route>
         <Route path="/projects/:projectId/tasks/:taskId/issues"
-          element = {<ViewIssues />} >
+          element={<PrivateRoute><ViewIssues /></PrivateRoute>} >
         </Route>
 
-        <Route path="/teams" element={<Teams />} />
-        <Route path="/teams/:teamId/members" element={<ViewTeamMembers/>} />
+        <Route path="/teams" element={<PrivateRoute><Teams /></PrivateRoute>} />
+        <Route path="/teams/:teamId/members" element={<PrivateRoute><ViewTeamMembers /></PrivateRoute>} />
       </Routes>
     </Router>
   );

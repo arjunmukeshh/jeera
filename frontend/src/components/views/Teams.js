@@ -3,8 +3,8 @@ import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
 import { Button, Container, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Header from './Header';
-
+import Header from '../Header';
+import API_BASE_URL from '../../config/config';
 const ViewTeams = () => {
     const [teams, setTeams] = useState([]);
     const [isAddTeamPopupOpen, setIsAddTeamPopupOpen] = useState(false);
@@ -12,7 +12,7 @@ const ViewTeams = () => {
     useEffect(() => {
         const fetchTeams = async () => {
             try {
-                const response = await fetch('http://localhost:3001/teams');
+                const response = await fetch(`${API_BASE_URL}/teams`);
                 if (!response.ok) {
                     throw new Error('Error fetching teams');
                 }
@@ -39,7 +39,7 @@ const ViewTeams = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:3001/teams', {
+            const response = await fetch(`${API_BASE_URL}/teams`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const ViewTeams = () => {
 
     const handleDeleteTeam = async (teamId) => {
         try {
-            const response = await fetch(`http://localhost:3001/teams/${teamId}`, {
+            const response = await fetch(`${API_BASE_URL}/teams/${teamId}`, {
                 method: 'DELETE',
             });
 

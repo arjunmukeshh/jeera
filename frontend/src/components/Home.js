@@ -4,14 +4,14 @@ import Button from '@mui/material/Button';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupIcon from '@mui/icons-material/Group';
-
+import API_BASE_URL from '../config/config';
 const Home = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/users/${localStorage.getItem('username')}/details`, {
+        const response = await fetch(`${API_BASE_URL}/users/${localStorage.getItem('username')}/details`, {
           headers: {
             Authorization: localStorage.getItem('jwtToken'),
           },

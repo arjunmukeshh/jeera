@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import API_BASE_URL from '../../config/config';
+
 const AddMemberModal = ({ isOpen, onRequestClose, onAddMember, teamId }) => {
+    // Use controlled component for the input field
     const [username, setUsername] = useState('');
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const [error, setError] = useState(null);
+    // Function to handle adding a team member
+    const addTeamMember = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/teams/${teamId}/add_member`, {
+            const response = await fetch(`${API_BASE_URL}/teams/${teamId}/add_member`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -19,13 +21,21 @@ const AddMemberModal = ({ isOpen, onRequestClose, onAddMember, teamId }) => {
                 throw new Error('Error adding team member');
             }
 
+            const data = await response.json();
+
             // Call the parent component's callback to update the team members
-            onAddMember(username);
-            window.location.reload();
+            onAddMember(data.username);
             onRequestClose(); // Close the modal after successful addition
         } catch (error) {
-            console.error('Error adding team member:', error);
+            setError(error.message)
+            // Handle error gracefully (e.g., show a message to the user)
         }
+    };
+
+    // Function to handle form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        addTeamMember();
     };
 
     return (

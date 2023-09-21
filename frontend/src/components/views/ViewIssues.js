@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Logout from './Logout';
-import AddIssuePopup from './AddIssuePopup';
-import EditIssuePopup from './EditIssuePopup';
+import Logout from '../Logout';
+import AddIssuePopup from '../popups/AddIssuePopup';
+import EditIssuePopup from '../popups/EditIssuePopup';
 import Papa from 'papaparse'
-import Header from './Header';
+import Header from '../Header';
+import API_BASE_URL from '../../config/config';
 
 const ViewIssues = () => {
     const { projectId, taskId } = useParams();
@@ -16,7 +17,7 @@ const ViewIssues = () => {
     useEffect(() => {
         const fetchIssues = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues`, {
+                const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks/${taskId}/issues`, {
                     headers: {
                         Authorization: localStorage.getItem('jwtToken'),
                     },
@@ -39,7 +40,7 @@ const ViewIssues = () => {
 
     const handleAddIssue = async (newIssue) => {
         try {
-            const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues/add`, {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks/${taskId}/issues/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ const ViewIssues = () => {
 
     const handleDeleteIssue = async (issueId) => {
         try {
-            const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues/${issueId}`, {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks/${taskId}/issues/${issueId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: localStorage.getItem('jwtToken'),
@@ -95,7 +96,7 @@ const ViewIssues = () => {
 
     const handleEditIssue = async (editedIssue) => {
         try {
-            const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues/${editedIssue.issue_id}`, {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks/${taskId}/issues/${editedIssue.issue_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -159,7 +160,7 @@ const ViewIssues = () => {
 
                 for (const issue of data) {
                     try {
-                        const response = await fetch(`http://localhost:3001/projects/${projectId}/tasks/${taskId}/issues/add`, {
+                        const response = await fetch(`${API_BASE_URL}/projects/${projectId}/tasks/${taskId}/issues/add`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -247,7 +248,7 @@ const ViewIssues = () => {
                             <strong>Priority:</strong> {issue.priority}<br />
                             <strong>Label:</strong> {issue.label}<br />
                             <strong>Status:</strong> {issue.status}<br />
-                            {(isAdmin || user_id == maintainer_id || issue.reports_to==user_id || issue.assignee_id==user_id) && <div><button onClick={() => openEditPopup(issue)}>Edit</button><br /></div>}
+                            {(isAdmin || user_id == maintainer_id || issue.reports_to==user_id || issue.assignee_id==user_id || localStorage.getItem('writeIssues')=="1") && <div><button onClick={() => openEditPopup(issue)}>Edit</button><br /></div>}
                             {(isAdmin || maintainer_id==user_id || issue.reports_to==user_id) &&  <div> <button onClick={() => handleDeleteIssue(issue.issue_id)}>Delete</button><br /></div>}
                            
                             <hr />

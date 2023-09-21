@@ -11,6 +11,7 @@ CREATE TABLE users (
     full_name VARCHAR(255) NOT NULL,
     email_id VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    active varchar(10) DEFAULT "1",
     isAdmin BOOLEAN DEFAULT FALSE
 );
 
@@ -35,9 +36,6 @@ CREATE TABLE issuetypes (
     issue_type_id INT AUTO_INCREMENT PRIMARY KEY,
     name ENUM('Epic', 'Task', 'Story', 'Bug') NOT NULL
 );
-
-
-
 
 
 /* Create the Labels table */
@@ -106,6 +104,8 @@ CREATE TABLE tasks_teams (
 CREATE TABLE projects_teams (
     project_id INT,
     teamname varchar(255),
+    writeTasks varchar(10) DEFAULT "0",
+    writeIssues varchar(10) DEFAULT "0",
     PRIMARY KEY (project_id, teamname),
     FOREIGN KEY (project_id) REFERENCES projects(project_id)
 );
@@ -142,7 +142,7 @@ INSERT INTO tasks (project_id, name, description, status, priority) VALUES (1, '
 
 
 /* Create the Projects_Teams junction table */
-INSERT INTO projects_teams (project_id, team_id) VALUES (1, 1), (1, 2), (2, 3);
+INSERT INTO projects_teams (project_id, teamname, writeTasks, writeIssues) VALUES (1, 'Development','1','0'), (1, 'Testing','0','0'), (2, 'Design','0','1');
 
 /* Create the Issues table */
 INSERT INTO issues (issue_type_id, task_id, summary, attachments, description, reports_to, assignee_id, priority, label, status) VALUES (1, 1, 'Epic for Task 1', NULL, 'Description for Epic related to Task 1', NULL, 1, 'High', 'Feature', 'open'), (2, 1, 'Task 1', NULL, 'Description for Task 1', NULL, 1, 'High', 'Feature', 'in progress');

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "../css/AddProjectPopup.css";
+import "../../css/AddProjectPopup.css";
 const AddProjectPopup = ({ onClose, onAddProject, projectToUpdate, onUpdateProject }) => {
   const [newProject, setNewProject] = useState({
     name: '',

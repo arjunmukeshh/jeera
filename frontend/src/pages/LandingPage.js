@@ -22,7 +22,7 @@ const LandingPage = () => {
           <p className="description">
             A Comprehensive Planning and Access Management Tool
           </p>
-          <CustomButton variant="contained" component={Link} to="/login" className="button">
+          <CustomButton variant="contained" component={Link} to="/login" >
             Get Started
           </CustomButton>
         </div>

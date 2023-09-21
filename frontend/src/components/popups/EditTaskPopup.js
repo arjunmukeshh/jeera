@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../css/AddProjectPopup.css";
+import "../../css/AddProjectPopup.css";
 
 const EditTaskPopup = ({ onClose, onEditTask, editedTask }) => {
   const [editedFields, setEditedFields] = useState({
