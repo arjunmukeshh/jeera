@@ -101,8 +101,16 @@ We use an Nginx server to enable reverse proxying. All requests to the backend a
 
 All API calls from the frontend are routed through '/api/'. This is setup in API_BASE_URL in frontend/src/config/config.js
 
+
+
 In case of Nginx setup failure, please comment out the API_BASE_URL='/api' and uncomment the API_BASE_URL='http://localhost:3001' and run the project again. 
 
 > While adding a team, make sure the teamname doesn't contain any white space character
+
+Admin account -> john_doe
+Password -> password123
+
+Non-admin account -> jane_doe
+Password -> password456
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/M4NvrXuV)
