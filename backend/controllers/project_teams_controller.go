@@ -29,7 +29,6 @@ func GetTeamsByProjectID(c *fiber.Ctx) error {
 func AddTeamToProject(c *fiber.Ctx) error {
 	projectID := c.Params("projectID")
 
-	// Assuming you have a model called `Projects_Teams` with fields `project_id`, `teamname`, and `write`
 	var projectTeam models.ProjectsTeams
 
 	// Parse the request body into the projectTeam struct
@@ -52,7 +51,7 @@ func AddTeamToProject(c *fiber.Ctx) error {
 		})
 	}
 
-	// Assuming you have a model called `Projects_Teams`
+
 	if err := config.DB.Table("Projects_Teams").Create(&projectTeam).Error; err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"success": false,
@@ -100,7 +99,7 @@ func GetProjectTeamsByUserIDAndProjectID(c *fiber.Ctx) error {
 
 	var projectTeams []models.ProjectsTeams
 
-	// Assuming you have a model called `Projects_Teams` with fields `project_id`, `teamname`, and `write`
+
 	config.DB.Raw(`select * from Projects_Teams where project_id=? and teamname IN(select name from Teams where team_id IN(select team_id from Team_Members where user_id=?))`, projectID, userID).Scan(&projectTeams)
 
 	return c.JSON(&projectTeams)
