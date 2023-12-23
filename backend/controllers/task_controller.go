@@ -181,8 +181,6 @@ func DeleteTask(c *fiber.Ctx) error {
 func GetIssuesForTask(c *fiber.Ctx) error {
 	taskID := c.Params("task_id")
 
-	// Assuming you have a way to validate if the task_id is valid
-
 	var issues []models.Issue
 	result := config.DB.Table("Issues").Where("task_id = ?", taskID).Find(&issues)
 
