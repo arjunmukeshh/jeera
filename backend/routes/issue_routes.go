@@ -6,7 +6,6 @@ import (
 )
 
 func SetupIssueRoutes(app *fiber.App) {
-	// Assuming these are the routes for managing issues under projects and tasks
 
 	app.Post("/projects/:project_id/tasks/:task_id/issues/add", controllers.AddIssue)
 	app.Get("/projects/:project_id/tasks/:task_id/issues", controllers.ViewAllIssues)
