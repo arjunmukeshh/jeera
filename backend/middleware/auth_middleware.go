@@ -24,7 +24,7 @@ func AuthMiddleware(c *fiber.Ctx) error {
 
 	// Access the claims (payload) of the token
 	claims := token.Claims.(jwt.MapClaims)
-	username := claims["Issuer"].(string) // Assuming you set the Issuer as the username
+	username := claims["Issuer"].(string) 
 
 	// Store the username in the context for later use
 	c.Locals("username", username)
