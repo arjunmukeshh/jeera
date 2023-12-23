@@ -21,7 +21,6 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
-	// Define your Fiber routes and start your server here
 
 	routes.SetupRoutes(app)
 
