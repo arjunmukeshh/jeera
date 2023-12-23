@@ -24,6 +24,28 @@ Jeera is a common Indian spice. Although it appears small and insignificant, it 
 
 This is a fully containerised application. Requires [Docker](https://docs.docker.com/get-docker/).
 
+## Screenshots
+
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/b4ecd74b-4074-4183-9113-1f0fb1438240)
+
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/4e2430d4-64cb-4b22-bd78-6fb45a2c7d55)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/0446c99b-bfd8-4d34-beed-19c6ec25cf21)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/f8e5829b-6a8d-440a-944e-9b538f014745)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/2ccedee1-742c-4d41-893d-2c5ca63c3e10)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/2be4da78-490b-4b4e-8a21-685f47ba5fb3)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/b42018b2-e830-4596-a3c0-53edcaefd0fa)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/032dcecd-74f0-4654-ad5f-62b2138b119f)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/e08fda7e-5a1e-4e28-b4c8-95dc0311e42c)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/59e93049-d66c-411a-9258-04977eab1776)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/05b08ee7-c5e3-42f2-a487-940b6b1a24a8)
+
+An Admin User Can look at Other users.
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/216df4c2-5e24-4876-9c9d-cea30814b274)
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/c6e51bd7-1f38-4ff5-a662-9ab516960cbc)
+
+Error page for JWT token expiry or other errors
+![image](https://github.com/arjunmukeshh/jeera/assets/60224351/e0fa8ba6-4961-4b03-9b16-ad28155aade4)
+
 ## Running Jeera
 
 1. Clone the git repository into your local machine.
